@@ -186,6 +186,9 @@ def push_to_database(data):
         command = ("INSERT INTO Cases", "(organizer_id,performers,description,areas,publication_time,end_time)")
     else:
         return
+    if data[0] != "Students" != "Companies" != "Cases":
+        return
+
     cur.execute(command,data[1])
     db.commit()
 
