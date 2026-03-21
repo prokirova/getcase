@@ -1,233 +1,240 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang=ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Профиль — {{ user.full_name }}</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #7c3aed 100%);
-      color: #111;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    .profile-container {
-      background: rgba(255, 255, 255, 0.22);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 520px;
-      overflow: hidden;
-      margin-top: 40px;
-    }
-
-    .username {
-      font-size: 1.05rem;
-      color: #4c1d95;
-      opacity: 0.9;
-      margin-bottom: 20px;
-    }
-
-    .info-block {
-      background: rgba(255,255,255,0.35);
-      border-radius: 16px;
-      margin: 0 20px 24px;
-      padding: 20px;
-      font-size: 1.02rem;
-      line-height: 1.55;
-      color: #2e1065;
-    }
-
-    .info-row {
-      display: flex;
-      margin-bottom: 12px;
-    }
-
-    .info-label {
-      width: 140px;
-      font-weight: 600;
-      color: #4c1d95;
-      flex-shrink: 0;
-    }
-
-    .info-value {
-      flex: 1;
-    }
-
-    .skills-section {
-      padding: 0 28px 32px;
-    }
-
-    .skills-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #1e1b4b;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    .skill-tag {
-      background: rgba(255,255,255,0.45);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.5);
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-size: 0.96rem;
-      font-weight: 500;
-      color: #2e1065;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .skill-add {
-      background: linear-gradient(90deg, #7c3aed, #a78bfa);
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .back-link {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      color: white;
-      font-size: 1.2rem;
-      text-decoration: none;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .back-link:hover {
-      opacity: 1;
-    }
-      .profile-header {
-  padding: 32px 28px 20px;
-  text-align: left;           /* общий сдвиг влево */
-}
-
-.profile-top-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;                  /* расстояние между аватаром и текстом */
-}
-
-.avatar-wrapper {
-  width: 100px;               /* можно 80–120px, подбери под вкус */
-  height: 100px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 4px solid rgba(255,255,255,0.65);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
-}
-
-.avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.name-block {
-  flex: 1;
-}
-
-.name {
-  font-size: 2.0rem;
-  font-weight: 700;
-  color: #1e1b4b;
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-
-.username {
-  font-size: 1.1rem;
-  color: #4c1d95;
-  opacity: 0.92;
-}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
 </head>
 <body>
+    <div id="main-container">
+        <div id="profile-image-box">
+            <img src="/static/Person.png" alt="000" id="profile-image">
+        </div>
 
-  <a href="/" class="back-link">← На главную</a>
+        <div id="user-info">
+            <div id="username">{{ user.full_name }}</div>
 
-  <div class="profile-container">
+            <div id="user-bio">
+                <div class="bio-row" id="university">
+                    <p class="user-bio-title">ВУЗ</p>
+                    <p class="user-bio-info">{{ user.university }}</p>
+                </div>
+                <div class="bio-row" id="grade">
+                    <p class="user-bio-title">Курс</p>
+                    <p class="user-bio-info">{{ user.course }} ({{ user.degree }})</p>
+                </div>
+                <div class="bio-row" id="institute">
+                    <p class="user-bio-title">Институт</p>
+                    <p class="user-bio-info">{{ user.institute }}</p>
+                </div>
+                <div class="bio-row" id="speciality">
+                    <p class="user-bio-title">Направление</p>
+                    <p class="user-bio-info">{{ user.specialty }}</p>
+                </div>
+                <div class="bio-row" id="email">
+                    <p class="user-bio-title">Email</p>
+                    <p class="user-bio-info">{{ user.email }}</p>
+                </div>
+                <div class="bio-row" id="phone-number">
+                    <p class="user-bio-title">Телефон</p>
+                    <p class="user-bio-info">{{ user.phone or '—' }}</p>
+                </div>
+                <div class="bio-row" id="telegram">
+                    <p class="user-bio-title">Телеграм</p>
+                    <p class="user-bio-info">{{ user.telegram or '—' }}</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="profile-header">
-  <div class="profile-top-row">
-    <div class="avatar-wrapper">
-      <img src="{{ user.avatar_url or 'https://via.placeholder.com/120?text=' + user.first_name[0] }}" alt="{{ user.full_name }}" class="avatar">
+        <div id="return-btn-div">
+            <button id="return-btn"></button>
+        </div>
+    
+        <h2 id="user-skills-title">Мои навыки:</h2>
+        
+        <div id="skills-container">
+            {% for skill in user.skills %}
+            <div class="skillbox">{{ skill }}</div>
+            {% endfor %}
+            <button id="add-skill">+</button>
+        </div>
     </div>
 
-    <div class="name-block">
-      <div class="name">{{ user.full_name }}</div>
-      <div class="username">@{{ user.username }}</div>
-    </div>
-  </div>
-</div>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <div class="info-block">
-      <div class="info-row">
-        <div class="info-label">ВУЗ:</div>
-        <div class="info-value">{{ user.university }}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Институт:</div>
-        <div class="info-value">{{ user.institute }}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Направление:</div>
-        <div class="info-value">{{ user.specialty }}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Курс:</div>
-        <div class="info-value">{{ user.course }} ({{ user.degree }})</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Email:</div>
-        <div class="info-value">{{ user.email }}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Телефон:</div>
-        <div class="info-value">{{ user.phone or '—' }}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Telegram:</div>
-        <div class="info-value">{{ user.telegram or '—' }}</div>
-      </div>
-    </div>
+        body {
+            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
 
-    <div class="skills-section">
-      <div class="skills-title">Мои навыки</div>
-      <div class="skills-list">
-        {% for skill in user.skills %}
-          <span class="skill-tag">{{ skill }}</span>
-        {% endfor %}
-        <button class="skill-tag skill-add">+</button>
-      </div>
-    </div>
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
 
-  </div>
+            font-family: 'Bahnschrift', sans-serif;
+        }
 
+        #main-container {
+            display: grid;
+            grid-gap: 1rem;
+            grid-template-areas:
+            "profile-image-box user-info return-btn-div"
+            "user-skills-title skills-container skills-container";
+            grid-template-columns: minmax(200px, 15%) 1fr minmax(60px, 10%);
+
+            margin: 50px 2% 50px 2%;
+            max-width: 96%;
+            width: 96%;
+        }
+
+        #profile-image-box {
+            grid-area: profile-image-box;
+            background-color: rgb(227, 227, 227);
+            height: 200px;
+            width: 200px;
+            border-radius: 100px;
+            margin-right: 10%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: center;
+            overflow: hidden;
+        }
+
+        #profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #user-info {
+            grid-area: user-info;
+            display: flex;
+            flex-direction: column;
+            min-width: 70%;
+        }
+
+        #return-btn-div {
+            grid-area: return-btn-div;
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 10%;
+        }
+
+        #return-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background-color: #7206c4e4;
+            background-image: url("/static/return_btn.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60%;
+        }
+
+        #username {
+            margin-bottom: 20px;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        #user-bio {
+            background-color: #ffffff36;
+            border-radius: 23px;
+            margin-bottom: 25px;
+            min-width: fit-content;
+        }
+
+        .bio-row {
+            margin: 15px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+            min-height: 50px;
+            min-width: fit-content;
+
+            background-color: white;
+            border-radius: 8px;
+        }
+
+        .user-bio-title {
+            background-color: inherit;
+            font-weight: bold;
+            font-size: 18px;
+            color: #7a7a7a91;
+        }
+
+        .user-bio-info {
+            background-color: inherit;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        #user-skills-title {
+            grid-area: user-skills-title;
+            display: flex;
+            align-items: start;
+            justify-content: center;
+            padding-top: 20px;
+            font-size: 30px;
+        }
+
+        #skills-container {
+            grid-area: skills-container;
+            display: flex;
+            flex-direction: row;
+            max-width: 85%;
+            flex-wrap: wrap;
+        }
+
+        .skillbox,
+        #add-skill {
+            margin: 10px 10px;
+            padding: 15px 35px;
+            height: fit-content;
+            width: fit-content;
+
+            background-color: #654EB9;
+            border-radius: 25px;
+            border-color: transparent;
+
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        #add-skill:hover,
+        #return-btn:hover {
+            background-color: #7a13c8ae;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        const addSkillBtn = document.getElementById("add-skill")
+        const skillsContainer = document.getElementById("skills-container")
+
+        function generateNewSkill() {
+            const newSkill = document.createElement("div");
+            newSkill.className = "skillbox";
+            newSkill.textContent = "NEWSKILL!";
+            return newSkill;
+        }
+
+        addSkillBtn.addEventListener("click", () => {
+            skillsContainer.insertBefore(generateNewSkill(), addSkillBtn);
+        })
+    </script>
 </body>
 </html>
