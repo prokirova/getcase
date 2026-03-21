@@ -348,7 +348,7 @@ def profile():
         return redirect(url_for('index'))
 
 
-@app.route('/case/<int:case_id>')
+@app.route('/cases/<int:case_id>')
 def view_case(case_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -381,6 +381,42 @@ def get_case_api(case_id):
             return jsonify({"error": "Case not found"}), 404
 
         return jsonify(case)
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/cases')
+def all_cases():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    return render_template('cases.html')
+
+
+@app.route('/api/cases', methods=['GET'])
+def get_cases_api():
+    if 'user_id' not in session:
+        return jsonify({"error": "Not authorized"}), 401
+
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        cur.execute("""
+            SELECT c.*, comp.name AS company_name
+            FROM Cases c
+            LEFT JOIN Companies comp ON c.organizer_id = comp.id
+            ORDER BY c.publication_time DESC
+        """)
+
+        cases = cur.fetchall()
+
+        cur.close()
+        db.close()
+
+        return jsonify(cases)
 
     except Exception as e:
         print(e)

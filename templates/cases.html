@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кейсы</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: #f5f6fa;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .company {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .desc {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .tags {
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eee;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .btn {
+            margin-top: 15px;
+            padding: 10px;
+            text-align: center;
+            background: linear-gradient(90deg, #a18cd1, #6a9ff8);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Доступные кейсы</h2>
+
+<div class="grid" id="casesContainer">
+    Загрузка...
+</div>
+
+<script>
+async function loadCases() {
+    try {
+        const res = await fetch('/api/cases');
+        const data = await res.json();
+
+        const container = document.getElementById('casesContainer');
+
+        if (!res.ok) {
+            container.innerHTML = "Ошибка загрузки";
+            return;
+        }
+
+        if (data.length === 0) {
+            container.innerHTML = "Пока нет кейсов";
+            return;
+        }
+
+        container.innerHTML = data.map(c => {
+            const areas = JSON.parse(c.areas || '[]');
+
+            return `
+                <div class="card" onclick="openCase(${c.id})">
+
+                    <div class="company">${c.company_name || 'Компания'}</div>
+
+                    <div class="tags">
+                        ${areas.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
+                    </div>
+
+                    <div class="title">${escapeHtml(c.description.slice(0, 60))}...</div>
+
+                    <div class="desc">
+                        ${escapeHtml(c.description.slice(0, 120))}
+                    </div>
+
+                    <div class="footer">
+                        До: ${c.end_time}
+                    </div>
+
+                    <div class="btn">Принять участие</div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (e) {
+        document.getElementById('casesContainer').innerHTML =
+            "Ошибка: " + e.message;
+    }
+}
+
+function openCase(id) {
+    window.location.href = `/case/${id}`;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+loadCases();
+</script>
+
+</body>
+</html>
