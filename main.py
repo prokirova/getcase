@@ -348,7 +348,7 @@ def profile():
         return redirect(url_for('index'))
 
 
-@app.route('/cases/<int:case_id>')
+@app.route('/case/<int:case_id>')
 def view_case(case_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
