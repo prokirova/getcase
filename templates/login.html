@@ -4,14 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #4c1d95 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .back-button:hover {
+            opacity: 1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.28);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.6px;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            opacity: 0.88;
+            font-weight: 400;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 18px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+            font-size: 1.03rem;
+            transition: all 0.2s;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.65);
+        }
+
+        input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 17px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(90deg, #6d28d9, #8b5cf6);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 5px 22px rgba(109, 40, 217, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(109, 40, 217, 0.55);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.25);
+            border: 1px solid #ef4444;
+            color: #fee2e2;
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            font-size: 0.97rem;
+            text-align: center;
+        }
+
+        .error p {
+            margin: 0;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.98rem;
+            opacity: 0.9;
+        }
+
+        .register-link a {
+            color: white;
+            font-weight: 600;
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+
+        .register-link a:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
+
     <a href="/" class="back-button">← На главную</a>
 
     <div class="container">
         <div class="header">
             <h1>Вход в систему</h1>
-            <div class="subtitle">Добро пожаловать</div>
+            <div class="subtitle">Добро пожаловать в GetCase</div>
         </div>
 
         {% with messages = get_flashed_messages() %}
@@ -36,15 +189,10 @@
             <button type="submit">Войти в систему</button>
         </form>
 
-        <div class="demo-info">
-            <strong>Демо доступ:</strong><br>
-            Логин: <strong>demo@example.com</strong><br>
-            Пароль: <strong>demo</strong>
-        </div>
-
         <div class="register-link">
             Нет аккаунта? <a href="/register">Зарегистрироваться</a>
         </div>
     </div>
+
 </body>
 </html>
