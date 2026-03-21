@@ -137,5 +137,4 @@ def pull_database(data):
 
 
 if __name__ == '__main__':
-    init_db()
     app.run()
