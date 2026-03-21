@@ -4,6 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GETCASE</title>
+    <script src="header.js" defer></script>
+    <style>
+        /*
+        ОБЩИЙ СТИЛЬ СТРАНИЦЫ
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: VT323;
+            src: url('/static/VT323-Regular.woff2');
+        }
+
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --sidebar-width: 20%;
+        }
+
+        body {
+            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            
+            font-family: 'Bahnschrift', sans-serif;
+        }
+        
+
+        /*
+        ОСНОВНОЙ КОНТЕНТ
+        */
+        .profile-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: all 0.2s;
+            text-decoration: none;
+            overflow: hidden;           /
+        }
+
+        .profile-btn:hover {
+            background: rgba(255,255,255,0.28);
+            transform: scale(1.08);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            min-width: 100%;
+            margin-top: 100px;
+        }
+
+        #main-info-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+            width: 90%;
+        }
+        
+        #logo-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            font-family: VT323;
+            font-size: 150px;
+            font-weight: bold;
+        }
+
+        #search-bar-container {
+            margin: 20px;
+            width: 50%;
+            height: 50px;
+            
+            display: flex;
+            flex-direction: row;
+            
+            border-radius: 25px;
+            background-color: white;
+            padding: 10px;
+        }
+        
+        #search-bar-container button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            border-radius: inherit;
+        }
+
+        #search-bar-container input {
+            border: none;
+            flex: 10;
+            padding: 0 10px;
+        }
+
+        #top-cases-title {
+            font-size: 20px;
+            justify-self: center;
+            margin-bottom: 20px;
+        }
+
+        #top-cases {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        #top-cases-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .company-card {
+            width: fit-content;
+            height: 60px;
+            padding: 5px 15px;
+            margin: 10px 15px;
+            
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            
+            border: 2px solid black;
+            border-radius: 30px;
+            background-color: #9198e542;
+            font-size: 18px;
+        }
+        
+        .company-card:hover {
+            background-color: #9198e5;
+            transition: 0.25s;
+            padding: 5px 20px;
+            margin: 10px;
+        }
+
+        #all-cases-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+        }
+        
+        .caseCard {
+            margin: 20px 30px;
+        }
+
+        .sidebar-wrapper {
+            width: 100%;
+        }
+
+    </style>
 </head>
 <body>
     <div class="sidebar-wrapper"></div>

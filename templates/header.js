@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Шаблона шапки страницы</title>
-</head>
-<body>
-    <div class="sidebar-wrapper">
+class MainHeader extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        this.render();
+        this.initSidebar();
+    }
+
+    render() {
+        this.innerHTML = `
         <header class="main-header">
             <div class="header-container">
                 <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
@@ -36,7 +39,6 @@
                 </ul>
             </nav>
         </aside>
-
         <div class="overlay" id="overlay"></div>
 
         <style>
@@ -47,26 +49,20 @@
                 --bg-color: #EBE9E9;
                 --sidebar-width: 20%;
             }
-
             body {
                 margin: 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: var(--bg-color);
                 color: var(--text-color);
             }
-
-            /* Шапка */
             .main-header {
                 background-color: transparent;
-                color: white;
                 padding: 1rem 0;
-                position: sticky;
+                position: absolute;
                 top: 0;
+                width: 100%;
                 z-index: 100;
-                box-shadow: none;
             }
-
-
             .header-container {
                 display: flex;
                 justify-content: space-between;
@@ -75,18 +71,15 @@
                 margin: 0 auto;
                 padding: 0 20px;
             }
-
-            /* Кнопка открытия сайдбара (гамбургер) */
             .sidebar-toggle {
-                margin-top: 20px;
                 background: none;
                 border: none;
                 cursor: pointer;
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
+                margin-top: 20px;
             }
-
             .sidebar-toggle span {
                 display: block;
                 width: 25px;
@@ -94,62 +87,31 @@
                 background-color: white;
                 border-radius: 2px;
             }
-
-            /* Сайдбар */
             .sidebar {
                 position: fixed;
                 top: 0;
-                left: calc(var(--sidebar-width) * -1); /* Скрыт за экраном */
-                width: var(--sidebar-width);
+                left: -300px;
+                width: 300px;
                 height: 100%;
                 background: white;
                 z-index: 1000;
                 transition: 0.3s ease;
                 box-shadow: 2px 0 10px rgba(0,0,0,0.2);
             }
-
-            .sidebar.active {
-                left: 0;
-            }
-
+            .sidebar.active { left: 0; }
             .sidebar-header {
                 padding: 20px;
-                background: var(--primary-color);
+                background: #6f2c80;
                 color: white;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-
-            .close-btn {
-                background: none;
-                border: none;
-                color: white;
-                font-size: 2rem;
-                cursor: pointer;
-            }
-
-            .sidebar-nav ul {
-                list-style: none;
-                padding: 20px;
-            }
-
-            .sidebar-nav li {
-                margin-bottom: 15px;
-            }
-
-            .sidebar-nav a {
-                text-decoration: none;
-                color: var(--text-color);
-                font-weight: 500;
-                transition: color 0.2s;
-            }
-
-            .sidebar-nav a:hover {
-                color: var(--accent-color);
-            }
-
-            /* Затемнение */
+            .close-btn { background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
+            .sidebar-nav ul { list-style: none; padding: 20px; }
+            .sidebar-nav li { margin-bottom: 15px; }
+            .sidebar-nav a { text-decoration: none; color: black; font-weight: 500; }
+            .sidebar-nav a:hover { color: #b023d3; }
             .overlay {
                 position: fixed;
                 top: 0;
@@ -160,18 +122,7 @@
                 display: none;
                 z-index: 999;
             }
-
-            .overlay.active {
-                display: block;
-            }
-
-            /* Контент */
-            .content-wrapper {
-                max-width: 1200px;
-                margin: 40px auto;
-                padding: 0 20px;
-            }
-
+            .overlay.active { display: block; }
             .profile-btn {
                 width: 44px;
                 height: 44px;
@@ -180,59 +131,32 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                
-                cursor: pointer;
                 border: 1px solid rgba(255,255,255,0.25);
-                transition: all 0.2s;
-                text-decoration: none;
-                overflow: hidden;           /
+                transition: 0.2s;
+                overflow: hidden;
+                margin-top: 20px;
             }
-
-            .profile-btn:hover {
-                background: rgba(255,255,255,0.28);
-                transform: scale(1.08);
-            }
-
-            .profile-img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                max-width: 100%;
-            }
+            .profile-img { width: 100%; height: 100%; object-fit: cover; }
         </style>
-    </div>
+        `;
+    }
 
-    <div class="sidebar-wrapper-js">
-        <script>
-            const openBtn = document.getElementById('openSidebar');
-            const closeBtn = document.getElementById('closeSidebar');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
+    initSidebar() {
+        const openBtn = this.querySelector('#openSidebar');
+        const closeBtn = this.querySelector('#closeSidebar');
+        const sidebar = this.querySelector('#sidebar');
+        const overlay = this.querySelector('#overlay');
 
-            function toggleSidebar() {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-            }
+        const toggle = () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        };
 
-            openBtn.addEventListener('click', toggleSidebar);
-            closeBtn.addEventListener('click', toggleSidebar);
-            overlay.addEventListener('click', toggleSidebar);
-        </script>
-    </div>
+        openBtn.addEventListener('click', toggle);
+        closeBtn.addEventListener('click', toggle);
+        overlay.addEventListener('click', toggle);
+    }
+}
 
-    <main class="content-wrapper"></main>
-
-    <script>
-        var pageContent = document.getElementsByClassName("sidebar-wrapper")[0].innerHTML; 
-        var pageContentScript = document.getElementsByClassName("sidebar-wrapper-js")[0].innerHTML; 
-        localStorage.setItem("headerTemplate", pageContent);
-        localStorage.setItem("headerTemplateScript", pageContentScript);
-    </script>
-</body>
-</html>
+// Регистрируем наш тег
+customElements.define('main-header', MainHeader);
