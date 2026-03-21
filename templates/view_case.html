@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр кейса</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #1e1e2f;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #2a2a40;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #00bcd4;
+        }
+
+        .block {
+            margin-top: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #00bcd4;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background: #00bcd4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="caseContent">Загрузка...</div>
+    <a href="/" class="btn">Назад</a>
+</div>
+
+<script>
+const caseId = window.location.pathname.split('/').pop();
+
+async function loadCase() {
+    try {
+        const response = await fetch(`/api/cases/${caseId}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error);
+        }
+
+        displayCase(data);
+
+    } catch (e) {
+        document.getElementById('caseContent').innerHTML =
+            `<p>Ошибка: ${e.message}</p>`;
+    }
+}
+
+function displayCase(caseData) {
+    const areas = JSON.parse(caseData.areas || '[]');
+    const performers = JSON.parse(caseData.performers || '[]');
+
+    document.getElementById('caseContent').innerHTML = `
+        <h1>Кейс #${caseData.id}</h1>
+
+        <div class="block">
+            <strong>Компания:</strong> ${caseData.company_name || 'Не указана'}
+        </div>
+
+        <div class="block">
+            <strong>Описание:</strong>
+            <p>${escapeHtml(caseData.description)}</p>
+        </div>
+
+        <div class="block">
+            <strong>Направления:</strong><br>
+            ${areas.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
+        </div>
+
+        <div class="block">
+            <strong>Участники:</strong><br>
+            ${performers.map(p => `<span class="tag">${escapeHtml(p)}</span>`).join('')}
+        </div>
+
+        <div class="block">
+            <strong>Дата публикации:</strong> ${caseData.publication_time}
+        </div>
+
+        <div class="block">
+            <strong>Дедлайн:</strong> ${caseData.end_time}
+        </div>
+    `;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+loadCase();
+</script>
+
+</body>
+</html>

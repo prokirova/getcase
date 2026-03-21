@@ -347,6 +347,45 @@ def profile():
         flash('Ошибка при загрузке профиля')
         return redirect(url_for('index'))
 
+
+@app.route('/case/<int:case_id>')
+def view_case(case_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    return render_template('view_case.html', case_id=case_id)
+
+
+@app.route('/api/cases/<int:case_id>', methods=['GET'])
+def get_case_api(case_id):
+    if 'user_id' not in session:
+        return jsonify({"error": "Not authorized"}), 401
+
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        cur.execute("""
+            SELECT c.*, comp.name AS company_name
+            FROM Cases c
+            LEFT JOIN Companies comp ON c.organizer_id = comp.id
+            WHERE c.id = %s
+        """, (case_id,))
+
+        case = cur.fetchone()
+
+        cur.close()
+        db.close()
+
+        if not case:
+            return jsonify({"error": "Case not found"}), 404
+
+        return jsonify(case)
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
