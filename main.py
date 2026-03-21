@@ -12,12 +12,6 @@ def get_server_connection():
         password='password'
     )
 
-def get_server_connection():
-    return mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='password'
-    )
 
 def init_db():
     conn = get_server_connection()
