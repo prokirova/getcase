@@ -17,6 +17,11 @@
             min-height: 100vh;
         }
 
+        @font-face {
+            font-family: VT323;
+            src: url(/static/VT323-Regular.woff2) format('woff2');
+        }
+
         #main-container {
             display: flex;
             flex-direction: column;
@@ -25,10 +30,11 @@
         }
 
         #logo-container {
-            font-size: clamp(60px, 10vw, 150px);
-            font-weight: bold;
-            font-family: 'Courier New', Courier, monospace; /* Замена VT323 для примера */
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            font-family: VT323;
+            font-size: 190px;
         }
 
         #search-bar-container {
