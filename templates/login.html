@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+</head>
+<body>
+    <a href="/" class="back-button">← На главную</a>
+
+    <div class="container">
+        <div class="header">
+            <h1>Вход в систему</h1>
+            <div class="subtitle">Добро пожаловать</div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="error">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login" class="login-form">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Ваш email" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Пароль" required>
+            </div>
+
+            <button type="submit">Войти в систему</button>
+        </form>
+
+        <div class="demo-info">
+            <strong>Демо доступ:</strong><br>
+            Логин: <strong>demo@example.com</strong><br>
+            Пароль: <strong>demo</strong>
+        </div>
+
+        <div class="register-link">
+            Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </div>
+    </div>
+</body>
+</html>
