@@ -168,16 +168,17 @@ def push_to_database(data):
     cur.execute(command)
     db.commit()
 
+def update_database(data):
+    db = get_database()
+    cur = db.cursor()
+    command = ("UPDATE %s SET  WHERE id = ?", data[1], data[0])
+
+
 def pull_database(data):
     db = get_database()
     cur = db.cursor()
-    if data[0] == "student":
-        command = ("SELECT * FROM Students WHERE id = ?", data[1])
-    if data[1] == "company":
-        command = ("SELECT * FROM Companies WHERE id = ?", data[1])
-    if data[2] == "case":
-        command = ("SELECT * FROM Cases WHERE id = ?", data[1])
-    cur.execute(command)
+    command = ("SELECT * FROM %s WHERE id = ?", data[1])
+    cur.execute(command, data[0])
     result = cur.fetchall()
     return result
 
