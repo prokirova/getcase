@@ -3,7 +3,69 @@ import os
 from datetime import datetime
 import bcrypt
 
+import mysql.connector
 
+def get_db_connection():
+    conn = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='password',
+        database='GetCase'
+    )
+    return conn
+
+def init_db():
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # если БД не было - создается
+    cur.execute("CREATE DATABASE IF NOT EXISTS GetCase")
+    cur.execute("USE GetCase")
+
+    # Students
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS Students (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        skills JSON,
+        university VARCHAR(255) NOT NULL,
+        faculty VARCHAR(255),
+        course TINYINT NOT NULL,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        phone_number VARCHAR(255) NOT NULL UNIQUE,
+        tg_id VARCHAR(255) UNIQUE,
+        tasks_started JSON,
+        tasks_progressing JSON,
+        password_hash VARCHAR(255) NOT NULL
+    )
+    """)
+
+    # Companies
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS Companies (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        information TEXT,
+        projects JSON
+    )
+    """)
+
+    # Cases
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS Cases (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        organizer_id INT NOT NULL,
+        performers JSON,
+        description TEXT NOT NULL,
+        areas JSON,
+        publication_time DATE NOT NULL,
+        end_time DATE NOT NULL,
+        FOREIGN KEY (organizer_id) REFERENCES Companies(id)
+    )
+    """)
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 #app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback_secret_key_if_not_set')
@@ -86,4 +148,5 @@ def login():
     return render_template('login.html')
 
 if __name__ == '__main__':
+    init_db()
     app.run()
