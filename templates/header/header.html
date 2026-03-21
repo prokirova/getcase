@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Универсальный шаблон</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="logo">GETCASE</div>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#">ПРОФИЛЬ</a></li>
+                <li><a href="#">РАБОЧИЕ КЕЙСЫ</a></li>
+                <li><a href="#">ИЗБРАННЫЕ КЕЙСЫ</a></li>
+                <li><hr></li>
+                <li><a href="#">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="content-wrapper">
+        <h1>Шаблон</h1>
+        <p>ШАБЛОН!!!!!!!!!!!!</p>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
