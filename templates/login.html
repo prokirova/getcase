@@ -173,6 +173,16 @@
         <!-- Здесь можно выводить ошибки через Jinja, как раньше -->
         <!-- {% with messages = get_flashed_messages() %} ... {% endwith %} -->
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="error">
+                    {% for message in messages %}
+                        <div>{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <form method="POST" action="/login" class="form">
             <div class="form-group">
                 <input type="email" name="email" placeholder="Ваш email" required>
