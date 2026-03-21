@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Профиль компании</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Bahnschrift, sans-serif;
+      background: linear-gradient(135deg, #9198e5, #D8C3F9);
+    }
+
+    .container {
+      padding: 40px 60px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .company-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .company-name {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .tags {
+      display: flex;
+      gap: 10px;
+    }
+
+    .tag {
+      background: #6c63ff;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .description {
+      margin-top: 25px;
+      background: rgba(255,255,255,0.4);
+      padding: 25px;
+      border-radius: 25px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #222;
+      max-width: 900px;
+    }
+
+    .cases-title {
+      margin-top: 40px;
+      font-size: 40px;
+      text-align: center;
+    }
+
+    .cases {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .case {
+      background: #eee;
+      border-radius: 30px;
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .case-left {
+      max-width: 70%;
+    }
+
+    .case-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .case-text {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .deadline {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .case-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 15px;
+    }
+
+    .btn {
+      background: #6c63ff;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 25px;
+      text-decoration: none;
+    }
+
+    .tag-small {
+      background: #6c63ff;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="top">
+    <div class="logo"></div>
+
+    <div>
+      <div class="company-header">
+        <div class="company-name">Т-Банк</div>
+        <div class="tags">
+          <div class="tag">IT</div>
+          <div class="tag">Финансы</div>
+        </div>
+      </div>
+
+      <div class="description">
+        Т Банк — российский коммерческий банк, специализирующийся на дистанционном обслуживании. Не имеет розничных отделений. Банк основан в 2006 году предпринимателем Олегом Тиньковым. Изначально назывался «ТКС-банк». По данным на февраль 2026 года, «Т-Банк» занимает-е место по размеру активов среди банков России, 4-е — по объёму вкладов, 6-е — по сумме выданных кредитов.
+      </div>
+    </div>
+  </div>
+
+  <div class="cases-title">Кейсы</div>
+
+  <div class="cases">
+
+    <div class="case">
+      <div class="case-left">
+        <div class="case-title">Разработка мобильного приложения для инвестиций</div>
+        <div class="case-text">Разработать мобильное приложение для инвестиций с функциями регистрации, просмотра портфеля, покупки/продажи акций и пополнения счёта....</div>
+        <div class="deadline">⏱ До 03.04.26</div>
+      </div>
+
+      <div class="case-right">
+        <div class="tag-small">UX/UI Design</div>
+        <a href="#" class="btn">Принять участие</a>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-left">
+        <div class="case-title">Оптимизация алгоритма рекомендаций</div>
+        <div class="case-text">Оптимизировать существующий алгоритм рекомендаций для повышения точности подбора контента и скорости работы.....</div>
+        <div class="deadline">⏱ До 03.04.26</div>
+      </div>
+
+      <div class="case-right">
+        <div class="tag-small">Data Science</div>
+        <a href="#" class="btn">Принять участие</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
