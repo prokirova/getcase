@@ -46,8 +46,11 @@
             </div>
         </div>
 
-        <div id="return-btn-div">
-            <button id="return-btn"></button>
+        <div id="side-buttons-div">
+            <a href="/" class="back-link">← На главную</a>
+            <a href="/my_cases">
+                <button id="show-cases-in-progress-btn">Посмотреть кейсы в работе</button>
+            </a>
         </div>
     
         <h2 id="user-skills-title">Мои навыки:</h2>
@@ -58,10 +61,6 @@
             {% endfor %}
             <button id="add-skill">+</button>
         </div>
-
-        <a href="/my_cases">
-            <button>Посмотреть кейсы в работе (пофиксите местоположение, плиз)</button>
-        </a>
     </div>
 
     <style>
@@ -89,9 +88,9 @@
             display: grid;
             grid-gap: 1rem;
             grid-template-areas:
-            "profile-image-box user-info return-btn-div"
+            "profile-image-box user-info side-buttons-div"
             "user-skills-title skills-container skills-container";
-            grid-template-columns: minmax(200px, 15%) 1fr minmax(60px, 10%);
+            grid-template-columns: minmax(200px, 15%) 1fr minmax(60px, 12%);
 
             margin: 50px 2% 50px 2%;
             max-width: 96%;
@@ -120,30 +119,32 @@
             display: block;
         }
 
+        #side-buttons-div {
+            grid-area: side-buttons-div; 
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            gap: 25px; 
+        }
+
+        .back-link {
+            color: rgba(0, 0, 0, 0.850);
+            font-size: 1.7rem;
+            text-decoration: none;
+            font-weight: 800;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
         #user-info {
             grid-area: user-info;
             display: flex;
             flex-direction: column;
             min-width: 70%;
-        }
-
-        #return-btn-div {
-            grid-area: return-btn-div;
-            display: flex;
-            justify-content: flex-end;
-            margin-right: 10%;
-        }
-
-        #return-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            background-color: #7206c4e4;
-            background-image: url("/static/return_btn.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 60%;
         }
 
         #username {
@@ -219,9 +220,25 @@
         }
 
         #add-skill:hover,
-        #return-btn:hover {
+        #return-btn:hover,
+        #show-cases-in-progress-btn:hover {
             background-color: #7a13c8ae;
             cursor: pointer;
+        }
+
+        #show-cases-in-progress-btn {
+            margin: 10px 10px;
+            padding: 10px 25px;
+            height: fit-content;
+            width: fit-content;
+
+            background-color: #654EB9;
+            border-radius: 25px;
+            border-color: transparent;
+
+            font-weight: 500;
+            font-size: 1.2rem;
+            color: white;
         }
     </style>
 
