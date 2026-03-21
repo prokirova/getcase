@@ -14,6 +14,10 @@
                     <span></span>
                     <span></span>
                 </button>
+
+                <a href="/login" class="profile-btn">
+                    <img src="/static/Person.png" alt="Профиль" class="profile-img">
+                </a>
             </div>
         </header>
 
@@ -62,15 +66,10 @@
                 box-shadow: none;
             }
 
-            .header-left-group {
-                display: flex;
-                align-items: center;
-                gap: 20%;
-            }
 
             .header-container {
                 display: flex;
-                justify-content: flex-start;
+                justify-content: space-between;
                 align-items: center;
                 max-width: 97%;
                 margin: 0 auto;
@@ -172,12 +171,45 @@
                 margin: 40px auto;
                 padding: 0 20px;
             }
+
+            .profile-btn {
+                width: 44px;
+                height: 44px;
+                background: rgba(255,255,255,0.18);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                
+                cursor: pointer;
+                border: 1px solid rgba(255,255,255,0.25);
+                transition: all 0.2s;
+                text-decoration: none;
+                overflow: hidden;           /
+            }
+
+            .profile-btn:hover {
+                background: rgba(255,255,255,0.28);
+                transform: scale(1.08);
+            }
+
+            .profile-img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                max-width: 100%;
+            }
         </style>
     </div>
 
     <div class="sidebar-wrapper-js">
         <script>
-            console.log(3243420);
             const openBtn = document.getElementById('openSidebar');
             const closeBtn = document.getElementById('closeSidebar');
             const sidebar = document.getElementById('sidebar');
