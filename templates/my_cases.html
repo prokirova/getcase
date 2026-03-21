@@ -3,26 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Мои кейсы</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            color: #000000;
+            overflow-x: hidden;
+        }
+
+        @font-face {
+            font-family: 'VT323';
+            src: url('/static/VT323-Regular.woff2') format('woff2');
+            /* Если шрифт локально не подгрузится, используем моноширинный по умолчанию */
+        }
+
+        .back-link {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        #page-title,
+        #main-container {
+            margin-left: min(40px, 5%);
+        }
+    </style>
 </head>
 <body>
 
-<h1>Мои кейсы</h1>
+<h1 id="page-title">Мои кейсы</h1>
 
-{% if cases %}
-    {% for case in cases %}
-        <div style="border:1px solid black; padding:10px; margin:10px;">
-            <h3>{{ case.company_name }}</h3>
-            <p>{{ case.description }}</p>
-            <a href="/case/{{ case.id }}">Открыть кейс</a>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>У вас пока нет кейсов</p>
-{% endif %}
+<div id="main-container">
+    {% if cases %}
+        {% for case in cases %}
+            <div style="border:1px solid black; padding:10px; margin:10px;">
+                <h3>{{ case.company_name }}</h3>
+                <p>{{ case.description }}</p>
+                <a href="/case/{{ case.id }}">Открыть кейс</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>У вас пока нет кейсов</p>
+    {% endif %}
+</div>
 
-<a href="/">
-    <button>Вернуться на главную</button>
-</a>
+<a href="/" class="back-link">← На главную</a>
 
 </body>
 </html>

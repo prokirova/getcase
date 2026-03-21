@@ -8,6 +8,10 @@
       margin: 0;
       font-family: Bahnschrift, sans-serif;
       background: linear-gradient(135deg, #9198e5, #D8C3F9);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      min-width: 600px;
     }
 
     .container {
@@ -27,8 +31,10 @@
     }
 
     .logo {
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
+      min-width: 150px;
+      min-height: 160px;
       border-radius: 50%;
       background: white;
     }
@@ -51,14 +57,14 @@
       color: white;
       padding: 8px 16px;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 18px;
     }
 
     .deadline {
       display: flex;
       align-items: center;
       gap: 5px;
-      font-size: 14px;
+      font-size: 20px;
       color: #333;
     }
 
@@ -84,6 +90,7 @@
       margin-top: 20px;
       display: flex;
       gap: 15px;
+      font-size: 18px;
     }
 
     .file-btn {
