@@ -1,12 +1,7 @@
 -- Создание базы данных
 CREATE DATABASE GetCase;
 
-<<<<<<< HEAD
-use GetCase
-=======
--- Выбор базы данных
 USE GetCase;
->>>>>>> 644fca2a4029165b446a3863448ac05844206192
 
 -- Создание таблицы Students
 CREATE TABLE IF NOT EXISTS `Students` (

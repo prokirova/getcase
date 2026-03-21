@@ -12,18 +12,12 @@ def get_server_connection():
         password='password'
     )
 
-def get_server_connection():
-    return mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='password'
-    )
 
 def init_db():
     conn = get_server_connection()
     cur = conn.cursor()
 
-    # если БД не было - создается
+    # создаем базу данных, если её нет
     cur.execute("CREATE DATABASE IF NOT EXISTS GetCase")
     cur.execute("USE GetCase")
 
@@ -64,7 +58,7 @@ def init_db():
         areas JSON,
         publication_time DATE NOT NULL,
         end_time DATE NOT NULL,
-        FOREIGN KEY (organizer_id) REFERENCES Companies(id)
+        FOREIGN KEY (organizer_id) REFERENCES Companies(id) ON DELETE RESTRICT ON UPDATE CASCADE
     )
     """)
 
@@ -85,38 +79,57 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        university = request.form['university']
+        faculty = request.form.get('faculty', '')
+        course = request.form['course']
+        phone_number = request.form['phone_number']
 
-        # Проверка длины пароля
+        # проверки
         if len(password) < 6:
             flash('Пароль должен содержать не менее 6 символов')
             return render_template('register.html')
 
-        """
-        conn = get_db_connection()
-        cur = conn.cursor()
+        try:
+            db = get_database()
+            cur = db.cursor()
 
-        cur.execute("SELECT id FROM users WHERE email = %s", (email,))
-        if cur.fetchone():
-            flash('Пользователь с таким email уже существует')
+            # проверка на существующий email
+            cur.execute("SELECT id FROM Students WHERE email = %s", (email,))
+            if cur.fetchone():
+                flash('Пользователь с таким email уже существует')
+                return render_template('register.html')
+
+            # хеш пароля
+            password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+            # создание пользователя
+            cur.execute("""
+                INSERT INTO Students 
+                (skills, university, faculty, course, email, phone_number, tg_id, tasks_started, tasks_progressing, password_hash)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                '[]',  # skills
+                university,
+                faculty,
+                course,
+                email,
+                phone_number,
+                None,  # tg_id
+                '[]',  # tasks_started
+                '[]',  # tasks_progressing
+                password_hash
+            ))
+
+            db.commit()
             cur.close()
-            conn.close()
-            return render_template('register.html')
+            db.close()
 
-        # Хеширование пароля
-        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            flash('Регистрация успешна!')
+            return redirect(url_for('login'))
 
-        # Создание пользователя
-        cur.execute(
-            "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-            (username, email, password_hash)
-        )
-
-        conn.commit()
-        cur.close()
-        conn.close()"""
-
-        flash('Регистрация успешна! Теперь вы можете войти.')
-        return redirect(url_for('login'))
+        except Exception as e:
+            print(e)
+            flash('Ошибка при регистрации')
 
     return render_template('register.html')
 
@@ -154,7 +167,12 @@ def login():
     return render_template('login.html')
 
 def get_database():
-    print('Getting database')
+    return mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='password',
+        database='GetCase'
+    )
 
 def push_to_database(data):
     db = get_database()
