@@ -218,6 +218,7 @@ def date_to_days(date):
     month = int(date[5:7])
     day = int(date[8:10])
     days = year*364+month*30+day
+    return days
 
 
 def get_cases_from_user(userid):
