@@ -272,34 +272,57 @@
         .caseCard {
             margin: 20px 30px;
         }
+
+        .sidebar-wrapper {
+            width: 100%;
+        }
+
     </style>
 
     <div class="sidebar-wrapper-js"></div>
     <script>
-        document.getElementsByClassName("sidebar-wrapper")[0].innerHTML=localStorage.getItem("headerTemplate");
-        const wrapperjs = document.getElementsByClassName("sidebar-wrapper-js")[0];
-        const scriptHtml = localStorage.getItem("headerTemplateScript");
-        
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = scriptHtml;
-        const script = tempDiv.querySelector('script');
-        if (script) {
-            const newScript = document.createElement('script');
-            newScript.textContent = script.textContent;
-            document.body.appendChild(newScript);
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const text = await response.text();
+
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = text;
+
+                const wrapper = document.querySelector('.sidebar-wrapper');
+
+                wrapper.innerHTML = tempDiv.innerHTML;
+            
+                setTimeout(() => {
+                    const openBtn = document.getElementById('openSidebar');
+                    const closeBtn = document.getElementById('closeSidebar');
+                    const sidebar = document.getElementById('sidebar');
+                    const overlay = document.getElementById('overlay');
+                    
+                    if (openBtn && closeBtn && sidebar && overlay) {
+                        function toggleSidebar() {
+                            sidebar.classList.toggle('active');
+                            overlay.classList.toggle('active');
+                        }
+                        
+                        openBtn.addEventListener('click', toggleSidebar);
+                        closeBtn.addEventListener('click', toggleSidebar);
+                        overlay.addEventListener('click', toggleSidebar);
+                    }
+                }, 0);
+                
+                initLocalListeners();
+            } catch (err) {
+                console.error('Ошибка загрузки шаблона:', err);
+            }
         }
         
-        // Кнопка поиска кейсов
-        const searchCaseBtn = document.getElementById("search-cases-btn");
-        searchCaseBtn.addEventListener("click", () => {
-            console.log("search")
-        });
-
-        // Кнопка фильтрации поиска
-        const filterCaseBtn = document.getElementById("filter-cases-btn");
-        filterCaseBtn.addEventListener("click", () => {
-            console.log("filter")
-        });
+        function initLocalListeners() {
+            document.getElementById("search-cases-btn")?.addEventListener("click", () => console.log("search"));
+            document.getElementById("filter-cases-btn")?.addEventListener("click", () => console.log("filter"));
+        }
+        
+        loadHeader();
     </script>
     
 </body>
