@@ -5,17 +5,15 @@ import bcrypt
 
 import mysql.connector
 
-def get_db_connection():
-    conn = mysql.connector.connect(
+def get_server_connection():
+    return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='password',
-        database='GetCase'
+        password='password'
     )
-    return conn
 
 def init_db():
-    conn = get_db_connection()
+    conn = get_server_connection()
     cur = conn.cursor()
 
     # если БД не было - создается
