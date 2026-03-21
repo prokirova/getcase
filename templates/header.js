@@ -42,19 +42,6 @@ class MainHeader extends HTMLElement {
         <div class="overlay" id="overlay"></div>
 
         <style>
-            :root {
-                --primary-color: #6f2c80;
-                --accent-color: #b023d3;
-                --text-color: #000000;
-                --bg-color: #EBE9E9;
-                --sidebar-width: 20%;
-            }
-            body {
-                margin: 0;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-            }
             .main-header {
                 background-color: transparent;
                 padding: 1rem 0;
