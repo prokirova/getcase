@@ -42,5 +42,3 @@ CREATE TABLE IF NOT EXISTS `Cases` (
 ALTER TABLE `Companies`
 ADD FOREIGN KEY(`id`) REFERENCES `Cases`(`organizer_id`)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-"dsdsdsd"
