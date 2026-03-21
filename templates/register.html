@@ -5,41 +5,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #4c1d95 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .back-button:hover {
+            opacity: 1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 520px;          /* ← стало шире (было 420px) */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.28);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 36px;
+            font-family: Helvetica, bold;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.6px;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            opacity: 0.88;
+            font-weight: 400;
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 15px 18px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+            font-size: 1.03rem;
+            transition: all 0.2s;
+            appearance: none;
+        }
+
+        select {
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            background-size: 16px;
+            cursor: pointer;
+        }
+
+        input::placeholder,
+        select option:disabled {
+            color: rgba(255,255,255,0.65);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+        }
+
+        .form-hint {
+            font-size: 0.86rem;
+            opacity: 0.78;
+            margin-top: 6px;
+            padding-left: 6px;
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 17px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(90deg, #6d28d9, #8b5cf6);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 5px 22px rgba(109, 40, 217, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(109, 40, 217, 0.55);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.25);
+            border: 1px solid #ef4444;
+            color: #fee2e2;
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 0.97rem;
+            text-align: center;
+        }
+
+        select option[value=""],
+        select:invalid {
+            color: rgba(255,255,255,0.6);
+        }
+    </style>
 </head>
 <body>
+
     <a href="/" class="back-button">← На главную</a>
 
     <div class="container">
         <div class="header">
             <h1>Регистрация</h1>
-            <div class="subtitle">Создайте свой аккаунт</div>
+            <div class="subtitle">Создайте свой аккаунт, чтобы воспользоваться всеми возможностями GetCase</div>
         </div>
 
         <div class="error-message" style="display: none;"></div>
 
         <form method="POST" class="register-form">
-        <div class="form-group">
-            <input type="text" name="username" placeholder="Как к вам обращаться?" required>
-        </div>
 
-        <div class="form-group">
-            <input type="email" name="email" placeholder="Email для входа" required>
-        </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email для входа" required>
+            </div>
 
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Пароль" required>
-        </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Пароль" required>
+            </div>
 
-        <div class="form-hint">
-            Пароль должен содержать не менее 6 символов
-        </div>
+            <div class="form-hint">
+                Пароль должен содержать не менее 6 символов
+            </div>
 
-        <button type="submit">Создать аккаунт</button>
+            <div class="form-group">
+                <input type="text" name="university" placeholder="Ваш вуз" required>
+            </div>
+
+            <div class="form-group">
+                <select name="course" required>
+                    <option value="" disabled selected>Курс</option>
+                    <option value="1">1 курс</option>
+                    <option value="2">2 курс</option>
+                    <option value="3">3 курс</option>
+                    <option value="4">4 курс</option>
+                    <option value="5">5 курс</option>
+                    <option value="6">6 курс (специалитет / магистратура)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="faculty" placeholder="Факультет / Институт" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="specialty" placeholder="Специальность / Направление" required>
+            </div>
+
+            <div class="form-group">
+                <input type="tel" name="phone" placeholder="Номер телефона (+7 ...)" pattern="[0-9+ ]{10,15}" required>
+            </div>
+
+            <div class="form-group">
+                <input type="date" name="birthdate" placeholder="Дата рождения" required>
+            </div>
+
+            <button type="submit">Создать аккаунт</button>
         </form>
-
-        <div class="login-link">
-            Уже есть аккаунт? <a href="/login">Войти в систему</a>
-        </div>
     </div>
+
 </body>
 </html>
