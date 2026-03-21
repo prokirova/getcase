@@ -1,8 +1,9 @@
+import mysql
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 import os
 from datetime import datetime
 import bcrypt
-
+import mysql.connector as connector
 
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -84,6 +85,24 @@ def login():
         return render_template('login.html')
 
     return render_template('login.html')
+
+def get_database():
+    print('Getting database')
+
+def push_to_database(data):
+    db = get_database()
+    cur = db.cursor()
+    if data[0] == "student":
+        command = ("INSERT INTO Students", data[1], data[2])
+    if data[0] == "company":
+        command = ("INSERT INTO Companies", data[1], data[2])
+    if data[0] == "case":
+        command = ("INSERT INTO Cases", data[1], data[2])
+    cur.execute(command)
+    db.commit()
+
+def pull_database(data):
+
 
 if __name__ == '__main__':
     app.run()
