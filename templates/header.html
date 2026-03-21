@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шаблона шапки страницы</title>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#">ПРОФИЛЬ</a></li>
+                <li><a href="#">КЕЙСЫ В РАБОТЕ</a></li>
+                <li><a href="#">ВСЕ КЕЙСЫ</a></li>
+                <li><hr></li>
+                <li><a href="#">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="content-wrapper"></main>
+
+    <style>
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --bg-color: #EBE9E9;
+            --sidebar-width: 20%;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Шапка */
+        .main-header {
+            background-color: transparent;
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: none;
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 20%;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            max-width: 97%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Кнопка открытия сайдбара (гамбургер) */
+        .sidebar-toggle {
+            margin-top: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        /* Сайдбар */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(var(--sidebar-width) * -1); /* Скрыт за экраном */
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Затемнение */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Контент */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+    </style>
+
+    <script>
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>
