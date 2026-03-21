@@ -79,7 +79,7 @@
         </section>
 
         <section id="all-cases-container">
-            
+
             <div class="caseCard">
                 <div class="caseCardColor"></div>
                 <div class="caseCardHeader">
@@ -142,6 +142,10 @@
             padding: 0;
             box-sizing: border-box;
         }
+        @font-face {
+            font-family: VT323;
+            src: url('static/VT323-Regular.woff2');
+        }
 
         :root {
             --primary-color: #6f2c80;
@@ -190,17 +194,13 @@
             margin: 0 auto;
             padding: 0 20px;
         }
-        @font-face {
-        font-family: VT323;
-        src: url('static/VT323-Regular.woff2');
-        }
+
         .logo {
             font-family: VT323;
             font-size: 1.5rem;
             font-weight: bold;
             margin-left: 50px;
         }
-
 
         /* Кнопка открытия сайдбара */
         .sidebar-toggle {
@@ -382,7 +382,7 @@
         .company-card {
             width: fit-content;
             height: 60px;
-            padding: 5px 15px;  
+            padding: 5px 15px;
             margin: 10px 15px;
 
             display: flex;
