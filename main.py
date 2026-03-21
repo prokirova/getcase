@@ -12,6 +12,13 @@ def get_server_connection():
         password='password'
     )
 
+def get_server_connection():
+    return mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='password'
+    )
+
 def init_db():
     conn = get_server_connection()
     cur = conn.cursor()
@@ -36,6 +43,34 @@ def init_db():
         password_hash VARCHAR(255) NOT NULL
     )
     """)
+
+    # Companies
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS Companies (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        information TEXT,
+        projects JSON
+    )
+    """)
+
+    # Cases
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS Cases (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        organizer_id INT NOT NULL,
+        performers JSON,
+        description TEXT NOT NULL,
+        areas JSON,
+        publication_time DATE NOT NULL,
+        end_time DATE NOT NULL,
+        FOREIGN KEY (organizer_id) REFERENCES Companies(id)
+    )
+    """)
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -134,7 +169,7 @@ def push_to_database(data):
     db.commit()
 
 def pull_database(data):
-
+    pass
 
 if __name__ == '__main__':
     init_db()
