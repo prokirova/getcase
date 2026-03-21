@@ -1,44 +1,51 @@
-create database GetCase
+-- Создание базы данных
+CREATE DATABASE GetCase;
 
+<<<<<<< HEAD
 use GetCase
+=======
+-- Выбор базы данных
+USE GetCase;
+>>>>>>> 644fca2a4029165b446a3863448ac05844206192
 
+-- Создание таблицы Students
 CREATE TABLE IF NOT EXISTS `Students` (
-	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-	`skills` JSON,
-	`university` VARCHAR(255) NOT NULL,
-	`faculty` VARCHAR(255),
-	`course` TINYINT NOT NULL,
-	`email` VARCHAR(255) NOT NULL UNIQUE CHECK(*@*),
-	`phone_number` VARCHAR(255) NOT NULL UNIQUE,
-	`tg_id` VARCHAR(255) UNIQUE,
-	`tasks_started` JSON,
-	`tasks_progressing` JSON,
-	`password_hash` VARCHAR(255) NOT NULL,
-	PRIMARY KEY(`id`)
+    `id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
+    `skills` JSON,
+    `university` VARCHAR(255) NOT NULL,
+    `faculty` VARCHAR(255),
+    `course` TINYINT NOT NULL,
+    `email` VARCHAR(255) NOT NULL UNIQUE,
+    `phone_number` VARCHAR(255) NOT NULL UNIQUE,
+    `tg_id` VARCHAR(255) UNIQUE,
+    `tasks_started` JSON,
+    `tasks_progressing` JSON,
+    `password_hash` VARCHAR(255) NOT NULL,
+    PRIMARY KEY(`id`)
 );
 
-
+-- Создание таблицы Companies
 CREATE TABLE IF NOT EXISTS `Companies` (
-	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-	`name` VARCHAR(255) NOT NULL,
-	`information` TEXT(65535),
-	`projects` JSON,
-	PRIMARY KEY(`id`)
+    `id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
+    `name` VARCHAR(255) NOT NULL,
+    `information` TEXT,
+    `projects` JSON,
+    PRIMARY KEY(`id`)
 );
 
-
+-- Создание таблицы Cases
 CREATE TABLE IF NOT EXISTS `Cases` (
-	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-	`organizer_id` INTEGER NOT NULL,
-	`performers` JSON,
-	`description` TEXT(65535) NOT NULL,
-	`areas` JSON,
-	`publication_time` DATE NOT NULL,
-	`end_time` DATE NOT NULL,
-	PRIMARY KEY(`id`)
+    `id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
+    `organizer_id` INTEGER NOT NULL,
+    `performers` JSON,
+    `description` TEXT NOT NULL,
+    `areas` JSON,
+    `publication_time` DATE NOT NULL,
+    `end_time` DATE NOT NULL,
+    PRIMARY KEY(`id`)
 );
 
-
-ALTER TABLE `Companies`
-ADD FOREIGN KEY(`id`) REFERENCES `Cases`(`organizer_id`)
+-- Добавление внешнего ключа
+ALTER TABLE `Cases`
+ADD FOREIGN KEY(`organizer_id`) REFERENCES `Companies`(`id`)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
