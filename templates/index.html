@@ -1,51 +1,203 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GETCASE</title>
-    <script src="header.js" defer></script>
+    <title>GETCASE — Главная</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            background: linear-gradient(135deg, #9198e5, #D8C3F9);
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-            font-family: 'Bahnschrift', sans-serif;
-            min-height: 100vh;
+        /* --- Базовые переменные и шрифты --- */
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --bg-gradient: linear-gradient(135deg, #9198e5, #D8C3F9);
+            --sidebar-width: 300px;
         }
 
         @font-face {
-            font-family: VT323;
-            src: url(/static/VT323-Regular.woff2) format('woff2');
+            font-family: 'VT323';
+            src: url('/static/VT323-Regular.woff2') format('woff2');
+            /* Если шрифт локально не подгрузится, используем моноширинный по умолчанию */
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* --- Шапка (Header) --- */
+        .main-header {
+            background-color: transparent;
+            padding: 1rem 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 97%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .profile-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: 0.2s;
+            overflow: hidden;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.28);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Сайдбар (Sidebar) --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* --- Основной контент страницы --- */
         #main-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 100px; /* Отступ под шапку */
+            padding-top: 120px;
+            padding-bottom: 50px;
         }
 
         #logo-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            font-family: VT323;
-            font-size: 190px;
+            font-family: 'VT323', monospace;
+            font-size: clamp(80px, 15vw, 190px);
+            font-weight: bold;
+            color: white;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            text-align: center;
         }
 
         #search-bar-container {
             width: 90%;
             max-width: 600px;
-            height: 50px;
+            height: 54px;
             display: flex;
             background: white;
-            border-radius: 25px;
-            padding: 5px 15px;
+            border-radius: 27px;
+            padding: 5px 20px;
             margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         #search-bar-container input {
@@ -53,6 +205,7 @@
             border: none;
             outline: none;
             padding: 0 10px;
+            font-size: 16px;
         }
 
         #search-bar-container button {
@@ -60,50 +213,118 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
-            color: #6f2c80;
+            color: var(--primary-color);
+            padding: 0 10px;
         }
 
+        /* Теги компаний */
         #top-cases {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
+            margin-top: 15px;
         }
 
         .company-card {
-            padding: 10px 20px;
+            padding: 10px 25px;
             border: 2px solid black;
             border-radius: 30px;
-            background: rgba(145, 152, 229, 0.2);
+            background: rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         .company-card:hover {
-            background: #9198e5;
+            background: white;
             transform: translateY(-3px);
         }
 
+        /* Сетка карточек */
         #all-cases-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 60px;
         }
 
-        .caseCard {
+        .case-card {
             background: white;
-            width: 300px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .case-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .case-card p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .open-case-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .open-case-btn:hover {
+            background: var(--accent-color);
         }
     </style>
 </head>
 <body>
 
-    <main-header></main-header>
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <a href="/login" class="profile-btn">
+                <img src="/static/Person.png" alt="Профиль" class="profile-img">
+            </a>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#">ПРОФИЛЬ</a></li>
+                <li><a href="#">КЕЙСЫ В РАБОТЕ</a></li>
+                <li><a href="#">ВСЕ КЕЙСЫ</a></li>
+                <li><hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;"></li>
+                <li><a href="#">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
 
     <div id="main-container">
         <section id="main-info-container">
@@ -111,12 +332,12 @@
             
             <div id="search-bar-container">
                 <button id="search-cases-btn">Найти</button>
-                <input type="search" placeholder="Найти кейс...">
+                <input type="search" placeholder="Найти кейс по названию или компании...">
                 <button id="filter-cases-btn">Фильтр</button>
             </div>
 
             <div id="top-cases-container">
-                <div style="text-align: center; margin-bottom: 15px;">Посмотреть варианты из топ компаний</div>
+                <div style="text-align: center; color: white; font-weight: 500;">Посмотреть кейсы топ компаний:</div>
                 <div id="top-cases">
                     <div class="company-card">Ozon</div>
                     <div class="company-card">Yandex</div>
@@ -127,20 +348,47 @@
         </section>
 
         <section id="all-cases-container">
-            <div class="caseCard">
+            <div class="case-card">
                 <h3>Дизайн-система</h3>
-                <p>Разработка интерфейса для крупного ритейлера</p>
-                <br>
-                <button style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: #6f2c80; color: white; cursor: pointer;">
-                    Открыть кейс
-                </button>
+                <p>Полное руководство по разработке масштабируемой библиотеки компонентов для крупного ритейл-проекта.</p>
+                <button class="open-case-btn">Открыть кейс</button>
+            </div>
+            
+            <div class="case-card">
+                <h3>Личный кабинет Sber</h3>
+                <p>Оптимизация пользовательского пути в мобильном приложении и обновление UI-кита.</p>
+                <button class="open-case-btn">Открыть кейс</button>
+            </div>
+
+            <div class="case-card">
+                <h3>Маркетплейс OZON</h3>
+                <p>Рефакторинг системы фильтрации товаров и улучшение конверсии на этапе корзины.</p>
+                <button class="open-case-btn">Открыть кейс</button>
             </div>
         </section>
     </div>
 
     <script>
-        // Локальная логика страницы
-        document.getElementById("search-cases-btn").addEventListener("click", () => alert("Поиск..."));
+        // Логика сайдбара
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Логика поиска
+        document.getElementById("search-cases-btn").addEventListener("click", () => {
+            const query = document.querySelector('input[type="search"]').value;
+            if(query) alert("Ищем: " + query);
+        });
     </script>
 </body>
 </html>
