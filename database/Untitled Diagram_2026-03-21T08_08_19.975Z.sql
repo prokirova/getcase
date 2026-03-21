@@ -1,3 +1,7 @@
+create database GetCase
+
+use database GetCase
+
 CREATE TABLE IF NOT EXISTS `Students` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
 	`skills` JSON,
