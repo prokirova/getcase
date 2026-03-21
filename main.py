@@ -198,7 +198,8 @@ def login():
                 cur.close()
                 db.close()
 
-                return redirect(url_for('index'))
+                #return redirect(url_for('index'))
+                return redirect(url_for('profile'))
             else:
                 flash('Неверный email или пароль')
 
@@ -278,7 +279,51 @@ def get_cases_from_user(userid):
     result_sorted = sorted(result, key=lambda k: date_to_days(k['end_time']))
     return result_sorted
 
+import json
 
+@app.route('/profile')
+def profile():
+    # проверка: залогинен ли пользователь
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        cur.execute("SELECT * FROM Students WHERE id = %s", (session['user_id'],))
+        user = cur.fetchone()
+
+        cur.close()
+        db.close()
+
+        if not user:
+            flash('Пользователь не найден')
+            return redirect(url_for('index'))
+
+        # формируем данные под HTML
+        user_data = {
+            "full_name": f"{user['last_name']} {user['first_name']} {user['middle_name'] or ''}",
+            "first_name": user['first_name'],
+            "username": user['email'].split('@')[0],  # временно
+            "email": user['email'],
+            "phone": user['phone_number'],
+            "telegram": user['tg_id'],
+            "university": user['university'],
+            "institute": user['faculty'],  # у тебя faculty = институт
+            "specialty": user['specialty'],
+            "course": user['course'],
+            "degree": "бакалавриат",  # пока заглушка
+            "skills": json.loads(user['skills']) if user['skills'] else [],
+            "avatar_url": None
+        }
+
+        return render_template('profile.html', user=user_data)
+
+    except Exception as e:
+        print(e)
+        flash('Ошибка при загрузке профиля')
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     init_db()
