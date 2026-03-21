@@ -160,16 +160,31 @@ def push_to_database(data):
     db = get_database()
     cur = db.cursor()
     if data[0] == "student":
-        command = ("INSERT INTO Students", data[1], data[2])
+        command = ("INSERT INTO Students", "(skills, university, faculty, course, email, phone_number, tg_id, tasks_started, tasks_progressing, password_hash)", data[1])
     if data[0] == "company":
-        command = ("INSERT INTO Companies", data[1], data[2])
+        command = ("INSERT INTO Companies", "(name,information,projects)", data[1])
     if data[0] == "case":
-        command = ("INSERT INTO Cases", data[1], data[2])
+        command = ("INSERT INTO Cases", "(organizer_id,performers,description,areas,publication_time,end_time)", data[1])
     cur.execute(command)
     db.commit()
 
 def pull_database(data):
-    pass
+    db = get_database()
+    cur = db.cursor()
+    if data[0] == "student":
+        command = ("SELECT * FROM Students WHERE id = ?", data[1])
+    if data[1] == "company":
+        command = ("SELECT * FROM Companies WHERE id = ?", data[1])
+    if data[2] == "case":
+        command = ("SELECT * FROM Cases WHERE id = ?", data[1])
+    cur.execute(command)
+    result = cur.fetchall()
+    return result
+
+def get_cases_from_user(user):
+    db = get_database()
+    cur = db.cursor()
+
 
 if __name__ == '__main__':
     app.run()
