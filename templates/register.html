@@ -17,6 +17,7 @@
         font-family: VT323;
         src: url('static/VT323-Regular.woff2');
         }
+
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #D8D0F0, #B19CD9);
@@ -60,7 +61,7 @@
         }
 
         .logo {
-            font-family: VT323;
+            font-family:VT323;
             font-size: 5.2rem;
             color: #7C5EB5;
             letter-spacing: 4px;
@@ -160,17 +161,6 @@
             box-shadow: 0 10px 30px rgba(124, 94, 181, 0.45);
         }
 
-        .error {
-            background: rgba(255, 100, 100, 0.15);
-            border: 2px solid #ff8080;
-            color: #c00;
-            padding: 14px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        /* Для Jinja flashed messages */
         .error-message {
             background: rgba(255, 100, 100, 0.15);
             border: 2px solid #ff8080;
@@ -193,17 +183,20 @@
         <h1>Регистрация</h1>
         <div class="subtitle">Создайте аккаунт, чтобы получить доступ ко всем кейсам</div>
 
-        <!-- {% with messages = get_flashed_messages() %} -->
-        <!--     {% if messages %} -->
-        <!--         <div class="error-message"> -->
-        <!--             {% for message in messages %} -->
-        <!--                 <p>{{ message }}</p> -->
-        <!--             {% endfor %} -->
-        <!--         </div> -->
-        <!--     {% endif %} -->
-        <!-- {% endwith %} -->
 
         <form method="POST" class="form">
+
+            <div class="form-group">
+                <input type="text" name="last_name" placeholder="Фамилия" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="first_name" placeholder="Имя" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="middle_name" placeholder="Отчество">
+            </div>
 
             <div class="form-group">
                 <input type="email" name="email" placeholder="Email для входа" required>
