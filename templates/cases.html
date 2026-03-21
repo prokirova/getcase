@@ -7,7 +7,10 @@
     <style>
         body {
             font-family: 'Segoe UI';
-            background: #f5f6fa;
+            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
             margin: 0;
             padding: 30px;
         }
@@ -89,37 +92,34 @@
 async function loadCases() {
     try {
         const res = await fetch('/api/cases');
-        const data = await res.json();
-
         const container = document.getElementById('casesContainer');
 
         if (!res.ok) {
-            container.innerHTML = "Ошибка загрузки";
+            container.innerHTML = "Ошибка загрузки: " + res.status;
             return;
         }
 
-        if (data.length === 0) {
+        const data = await res.json();
+
+        if (!data.length) {
             container.innerHTML = "Пока нет кейсов";
             return;
         }
 
         container.innerHTML = data.map(c => {
-            const areas = JSON.parse(c.areas || '[]');
+            const areas = Array.isArray(c.areas) ? c.areas : JSON.parse(c.areas || '[]');
+            const safeDesc = escapeHtml(c.description || '');
 
             return `
                 <div class="card" onclick="openCase(${c.id})">
-
                     <div class="company">${c.company_name || 'Компания'}</div>
 
                     <div class="tags">
                         ${areas.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
                     </div>
 
-                    <div class="title">${escapeHtml(c.description.slice(0, 60))}...</div>
-
-                    <div class="desc">
-                        ${escapeHtml(c.description.slice(0, 120))}
-                    </div>
+                    <div class="title">${safeDesc.length > 60 ? safeDesc.slice(0, 60) + '...' : safeDesc}</div>
+                    <div class="desc">${safeDesc.slice(0, 120)}</div>
 
                     <div class="footer">
                         До: ${c.end_time}
@@ -131,8 +131,7 @@ async function loadCases() {
         }).join('');
 
     } catch (e) {
-        document.getElementById('casesContainer').innerHTML =
-            "Ошибка: " + e.message;
+        document.getElementById('casesContainer').innerHTML = "Ошибка: " + e.message;
     }
 }
 
