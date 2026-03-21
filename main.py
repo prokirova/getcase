@@ -422,6 +422,14 @@ def get_cases_api():
         print(e)
         return jsonify({"error": str(e)}), 500
 
+
+@app.route('/logout')
+def logout():
+    session.clear()  # очищаем всю сессию
+    flash('Вы вышли из аккаунта')
+    return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
