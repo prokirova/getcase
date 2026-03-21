@@ -6,513 +6,135 @@
     <title>GETCASE</title>
     <script src="header.js" defer></script>
     <style>
-        /*
-        ОБЩИЙ СТИЛЬ СТРАНИЦЫ
-        */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @font-face {
-            font-family: VT323;
-            src: url('/static/VT323-Regular.woff2');
-        }
-
-        :root {
-            --primary-color: #6f2c80;
-            --accent-color: #b023d3;
-            --text-color: #000000;
-            --sidebar-width: 20%;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background: linear-gradient(135deg, #9198e5, #D8C3F9);
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
-            
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            
             font-family: 'Bahnschrift', sans-serif;
-        }
-        
-
-        /*
-        ОСНОВНОЙ КОНТЕНТ
-        */
-        .profile-btn {
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.18);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.25);
-            transition: all 0.2s;
-            text-decoration: none;
-            overflow: hidden;           /
+            min-height: 100vh;
         }
 
-        .profile-btn:hover {
-            background: rgba(255,255,255,0.28);
-            transform: scale(1.08);
-        }
-
-        .profile-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
         #main-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            
-            min-width: 100%;
-            margin-top: 100px;
+            padding-top: 100px; /* Отступ под шапку */
         }
 
-        #main-info-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            
-            width: 90%;
-        }
-        
         #logo-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            font-family: VT323;
-            font-size: 150px;
+            font-size: clamp(60px, 10vw, 150px);
             font-weight: bold;
+            font-family: 'Courier New', Courier, monospace; /* Замена VT323 для примера */
+            margin-bottom: 20px;
         }
 
         #search-bar-container {
-            margin: 20px;
-            width: 50%;
+            width: 90%;
+            max-width: 600px;
             height: 50px;
-            
             display: flex;
-            flex-direction: row;
-            
+            background: white;
             border-radius: 25px;
-            background-color: white;
-            padding: 10px;
-        }
-        
-        #search-bar-container button {
-            flex: 1;
-            background-color: inherit;
-            border: none;
-            border-radius: inherit;
+            padding: 5px 15px;
+            margin-bottom: 40px;
         }
 
         #search-bar-container input {
+            flex: 1;
             border: none;
-            flex: 10;
+            outline: none;
             padding: 0 10px;
         }
 
-        #top-cases-title {
-            font-size: 20px;
-            justify-self: center;
-            margin-bottom: 20px;
+        #search-bar-container button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: #6f2c80;
         }
 
         #top-cases {
             display: flex;
-            flex-direction: row;
             flex-wrap: wrap;
-        }
-
-        #top-cases-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            gap: 15px;
         }
 
         .company-card {
-            width: fit-content;
-            height: 60px;
-            padding: 5px 15px;
-            margin: 10px 15px;
-            
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            
+            padding: 10px 20px;
             border: 2px solid black;
             border-radius: 30px;
-            background-color: #9198e542;
-            font-size: 18px;
+            background: rgba(145, 152, 229, 0.2);
+            cursor: pointer;
+            transition: 0.3s;
         }
-        
+
         .company-card:hover {
-            background-color: #9198e5;
-            transition: 0.25s;
-            padding: 5px 20px;
-            margin: 10px;
+            background: #9198e5;
+            transform: translateY(-3px);
         }
 
         #all-cases-container {
             display: flex;
-            flex-direction: row;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
-            margin: 20px;
+            gap: 20px;
+            margin-top: 50px;
         }
-        
+
         .caseCard {
-            margin: 20px 30px;
+            background: white;
+            width: 300px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
-        .sidebar-wrapper {
-            width: 100%;
-        }
-
     </style>
 </head>
 <body>
-    <div class="sidebar-wrapper"></div>
+
+    <main-header></main-header>
 
     <div id="main-container">
         <section id="main-info-container">
             <div id="logo-container">GETCASE</div>
+            
             <div id="search-bar-container">
-                <button id="search-cases-btn">Srch</button>
+                <button id="search-cases-btn">Найти</button>
                 <input type="search" placeholder="Найти кейс...">
-                <button id="filter-cases-btn">Filtr</button>
+                <button id="filter-cases-btn">Фильтр</button>
             </div>
+
             <div id="top-cases-container">
-                <div id="top-cases-title">Посмотреть варианты из топ компаний</div>
+                <div style="text-align: center; margin-bottom: 15px;">Посмотреть варианты из топ компаний</div>
                 <div id="top-cases">
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
-                    <div class="company-card">
-                        <img src="" alt="comp">
-                        <p>Company</p>
-                    </div>
+                    <div class="company-card">Ozon</div>
+                    <div class="company-card">Yandex</div>
+                    <div class="company-card">Sber</div>
+                    <div class="company-card">VK</div>
                 </div>
             </div>
         </section>
 
         <section id="all-cases-container">
-
             <div class="caseCard">
-                <div class="caseCardColor"></div>
-                <div class="caseCardHeader">
-                    <div class="caseCardCompany">
-                        <img src="" alt="cimg">
-                        <p>company</p>
-                    </div>
-                    <div class="caseCardTech">
-                        <p>Tech</p>
-                    </div>
-                </div>
-                <div class="caseCardBody">Description</div>
-                <div class="caseCardAdditional">
-                    <div class="caseCardAdditionalTime">
-                        <img src="" alt="timer">
-                        <p>Time due</p>
-                    </div>
-                    <div class="caseCardAdditionalPeople">
-                        <img src="" alt="people">
-                        <p>42 participants</p>
-                    </div>
-                </div>
-                <button>Get the Case!</button>
+                <h3>Дизайн-система</h3>
+                <p>Разработка интерфейса для крупного ритейлера</p>
+                <br>
+                <button style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: #6f2c80; color: white; cursor: pointer;">
+                    Открыть кейс
+                </button>
             </div>
-
-            <div class="caseCard">
-                <div class="caseCardColor"></div>
-                <div class="caseCardHeader">
-                    <div class="caseCardCompany">
-                        <img src="" alt="cimg">
-                        <p>company</p>
-                    </div>
-                    <div class="caseCardTech">
-                        <p>Tech</p>
-                    </div>
-                </div>
-                <div class="caseCardBody">Description</div>
-                <div class="caseCardAdditional">
-                    <div class="caseCardAdditionalTime">
-                        <img src="" alt="timer">
-                        <p>Time due</p>
-                    </div>
-                    <div class="caseCardAdditionalPeople">
-                        <img src="" alt="people">
-                        <p>42 participants</p>
-                    </div>
-                </div>
-                <button>Get the Case!</button>
-            </div>
-
         </section>
     </div>
 
-    <style>
-        /*
-        ОБЩИЙ СТИЛЬ СТРАНИЦЫ
-        */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @font-face {
-            font-family: VT323;
-            src: url('/static/VT323-Regular.woff2');
-        }
-
-        :root {
-            --primary-color: #6f2c80;
-            --accent-color: #b023d3;
-            --text-color: #000000;
-            --sidebar-width: 20%;
-        }
-
-        body {
-            background: linear-gradient(135deg, #9198e5, #D8C3F9);
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-            
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            
-            font-family: 'Bahnschrift', sans-serif;
-        }
-        
-
-        /*
-        ОСНОВНОЙ КОНТЕНТ
-        */
-        .profile-btn {
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.18);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.25);
-            transition: all 0.2s;
-            text-decoration: none;
-            overflow: hidden;           /
-        }
-
-        .profile-btn:hover {
-            background: rgba(255,255,255,0.28);
-            transform: scale(1.08);
-        }
-
-        .profile-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        #main-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            
-            min-width: 100%;
-            margin-top: 100px;
-        }
-
-        #main-info-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            
-            width: 90%;
-        }
-        
-        #logo-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            font-family: VT323;
-            font-size: 150px;
-            font-weight: bold;
-        }
-
-        #search-bar-container {
-            margin: 20px;
-            width: 50%;
-            height: 50px;
-            
-            display: flex;
-            flex-direction: row;
-            
-            border-radius: 25px;
-            background-color: white;
-            padding: 10px;
-        }
-        
-        #search-bar-container button {
-            flex: 1;
-            background-color: inherit;
-            border: none;
-            border-radius: inherit;
-        }
-
-        #search-bar-container input {
-            border: none;
-            flex: 10;
-            padding: 0 10px;
-        }
-
-        #top-cases-title {
-            font-size: 20px;
-            justify-self: center;
-            margin-bottom: 20px;
-        }
-
-        #top-cases {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        #top-cases-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .company-card {
-            width: fit-content;
-            height: 60px;
-            padding: 5px 15px;
-            margin: 10px 15px;
-            
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            
-            border: 2px solid black;
-            border-radius: 30px;
-            background-color: #9198e542;
-            font-size: 18px;
-        }
-        
-        .company-card:hover {
-            background-color: #9198e5;
-            transition: 0.25s;
-            padding: 5px 20px;
-            margin: 10px;
-        }
-
-        #all-cases-container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            margin: 20px;
-        }
-        
-        .caseCard {
-            margin: 20px 30px;
-        }
-
-        .sidebar-wrapper {
-            width: 100%;
-        }
-
-    </style>
-
-    <div class="sidebar-wrapper-js"></div>
     <script>
-        async function loadHeader() {
-            try {
-                const response = await fetch('header.html');
-                const text = await response.text();
-
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = text;
-
-                const wrapper = document.querySelector('.sidebar-wrapper');
-
-                wrapper.innerHTML = tempDiv.innerHTML;
-            
-                setTimeout(() => {
-                    const openBtn = document.getElementById('openSidebar');
-                    const closeBtn = document.getElementById('closeSidebar');
-                    const sidebar = document.getElementById('sidebar');
-                    const overlay = document.getElementById('overlay');
-                    
-                    if (openBtn && closeBtn && sidebar && overlay) {
-                        function toggleSidebar() {
-                            sidebar.classList.toggle('active');
-                            overlay.classList.toggle('active');
-                        }
-                        
-                        openBtn.addEventListener('click', toggleSidebar);
-                        closeBtn.addEventListener('click', toggleSidebar);
-                        overlay.addEventListener('click', toggleSidebar);
-                    }
-                }, 0);
-                
-                initLocalListeners();
-            } catch (err) {
-                console.error('Ошибка загрузки шаблона:', err);
-            }
-        }
-        
-        function initLocalListeners() {
-            document.getElementById("search-cases-btn")?.addEventListener("click", () => console.log("search"));
-            document.getElementById("filter-cases-btn")?.addEventListener("click", () => console.log("filter"));
-        }
-        
-        loadHeader();
+        // Локальная логика страницы
+        document.getElementById("search-cases-btn").addEventListener("click", () => alert("Поиск..."));
     </script>
-    
 </body>
 </html>
