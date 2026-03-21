@@ -213,9 +213,22 @@ def pull_database(data):
     result = cur.fetchall()
     return result
 
-def get_cases_from_user(user):
+def date_to_days(date):
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[8:10])
+    days = year*364+month*30+day
+
+
+def get_cases_from_user(userid):
     db = get_database()
     cur = db.cursor()
+    command = ("SELECT tasks_started FROM Students WHERE id = %s")
+    cur.execute(command, userid)
+    result = cur.fetchall()
+    result_sorted = sorted(result, key=lambda k: date_to_days(k['end_time']))
+    return result_sorted
+
 
 
 if __name__ == '__main__':
