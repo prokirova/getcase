@@ -2,10 +2,446 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>test page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GETCASE</title>
 </head>
 <body>
-<div>text text</div>
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="logo">GETCASE</div>
+        </div>
+    </header>
 
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#">ПРОФИЛЬ</a></li>
+                <li><a href="#">РАБОЧИЕ КЕЙСЫ</a></li>
+                <li><a href="#">ИЗБРАННЫЕ КЕЙСЫ</a></li>
+                <li><hr></li>
+                <li><a href="#">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div id="main-container">
+        <section id="main-info-container">
+            <div id="logo-container">GETCASE</div>
+            <div id="search-bar-container">
+                <button id="search-cases-btn">Srch</button>
+                <input type="search" placeholder="Найти кейс...">
+                <button id="filter-cases-btn">Filtr</button>
+            </div>
+            <div id="top-cases-container">
+                <div id="top-cases-title">Посмотреть варианты из топ компаний</div>
+                <div id="top-cases">
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                    <div class="company-card">
+                        <img src="" alt="comp">
+                        <p>Company</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="all-cases-container">
+            
+            <div class="caseCard">
+                <div class="caseCardColor"></div>
+                <div class="caseCardHeader">
+                    <div class="caseCardCompany">
+                        <img src="" alt="cimg">
+                        <p>company</p>
+                    </div>
+                    <div class="caseCardTech">
+                        <p>Tech</p>
+                    </div>
+                </div>
+                <div class="caseCardBody">Description</div>
+                <div class="caseCardAdditional">
+                    <div class="caseCardAdditionalTime">
+                        <img src="" alt="timer">
+                        <p>Time due</p>
+                    </div>
+                    <div class="caseCardAdditionalPeople">
+                        <img src="" alt="people">
+                        <p>42 participants</p>
+                    </div>
+                </div>
+                <button>Get the Case!</button>
+            </div>
+
+            <div class="caseCard">
+                <div class="caseCardColor"></div>
+                <div class="caseCardHeader">
+                    <div class="caseCardCompany">
+                        <img src="" alt="cimg">
+                        <p>company</p>
+                    </div>
+                    <div class="caseCardTech">
+                        <p>Tech</p>
+                    </div>
+                </div>
+                <div class="caseCardBody">Description</div>
+                <div class="caseCardAdditional">
+                    <div class="caseCardAdditionalTime">
+                        <img src="" alt="timer">
+                        <p>Time due</p>
+                    </div>
+                    <div class="caseCardAdditionalPeople">
+                        <img src="" alt="people">
+                        <p>42 participants</p>
+                    </div>
+                </div>
+                <button>Get the Case!</button>
+            </div>
+
+        </section>
+    </div>
+
+    <style>
+        /*
+        ОБЩИЙ СТИЛЬ СТРАНИЦЫ
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --sidebar-width: 20%;
+        }
+
+        body {
+            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+
+            font-family: 'Bahnschrift', sans-serif;
+        }
+
+        /*
+        БОКОВОЕ МЕНЮ
+        */
+        .main-header {
+            background-color: transparent;
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: none;
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 20%;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            max-width: 97%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-left: 50px;
+        }
+
+        /* Кнопка открытия сайдбара */
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        /* Сайдбар */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(var(--sidebar-width) * -1); /* Скрыт за экраном */
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Затемнение сайдбара */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Контент  сайдбара*/
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        #side-menu-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background-color: #7206c4e4;
+            background-image: url("return_btn.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60%;
+        }
+
+
+        /*
+        ОСНОВНОЙ КОНТЕНТ
+        */
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            min-width: 100%;
+            margin-top: 100px;
+        }
+
+        #main-info-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            width: 90%;
+        }
+
+        #logo-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            font-size: 100px;
+            font-weight: bold;
+        }
+
+        #search-bar-container {
+            margin: 20px;
+            width: 50%;
+            height: 50px;
+
+            display: flex;
+            flex-direction: row;
+
+            border-radius: 25px;
+            background-color: white;
+            padding: 10px;
+        }
+
+        #search-bar-container button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            border-radius: inherit;
+        }
+
+        #search-bar-container input {
+            border: none;
+            flex: 10;
+            padding: 0 10px;
+        }
+
+        #top-cases-title {
+            font-size: 20px;
+            justify-self: center;
+            margin-bottom: 20px;
+        }
+
+        #top-cases {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .company-card {
+            width: fit-content;
+            height: 60px;
+            padding: 5px 15px;  
+            margin: 10px 15px;
+
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+
+            border: 2px solid black;
+            border-radius: 30px;
+            background-color: #9198e542;
+            font-size: 18px;
+        }
+
+        .company-card:hover {
+            background-color: #9198e5;
+            transition: 0.25s;
+            padding: 5px 20px;
+            margin: 10px;
+        }
+
+        #all-cases-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .caseCard {
+            margin: 20px 30px;
+        }
+    </style>
+
+    <script>
+        // Кнопка поиска кейсов
+        const searchCaseBtn = document.getElementById("search-cases-btn");
+        searchCaseBtn.addEventListener("click", () => {
+            console.log("search")
+        });
+
+        // Кнопка фильтрации поиска
+        const filterCaseBtn = document.getElementById("filter-cases-btn");
+        filterCaseBtn.addEventListener("click", () => {
+            console.log("filter")
+        });
+
+
+        /*
+        Сайдбар
+        */
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>
