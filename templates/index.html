@@ -272,6 +272,11 @@
         .caseCard {
             margin: 20px 30px;
         }
+
+        .sidebar-wrapper {
+            width: 100%;
+        }
+
     </style>
 
     <div class="sidebar-wrapper-js"></div>
@@ -280,34 +285,43 @@
             try {
                 const response = await fetch('header.html');
                 const text = await response.text();
-                
-                // Создаем временный элемент для парсинга
+
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = text;
 
-                // Вставляем HTML
                 const wrapper = document.querySelector('.sidebar-wrapper');
-                const headerContent = tempDiv.querySelector('.sidebar-wrapper').innerHTML;
-                wrapper.innerHTML = headerContent;
 
-                // Извлекаем и запускаем скрипт сайдбара
-                const scriptContent = tempDiv.querySelector('.sidebar-wrapper-js script').textContent;
-                const newScript = document.createElement('script');
-                newScript.textContent = scriptContent;
-                document.body.appendChild(newScript);
-
-                // Инициализируем поиск (ваши старые обработчики)
+                wrapper.innerHTML = tempDiv.innerHTML;
+            
+                setTimeout(() => {
+                    const openBtn = document.getElementById('openSidebar');
+                    const closeBtn = document.getElementById('closeSidebar');
+                    const sidebar = document.getElementById('sidebar');
+                    const overlay = document.getElementById('overlay');
+                    
+                    if (openBtn && closeBtn && sidebar && overlay) {
+                        function toggleSidebar() {
+                            sidebar.classList.toggle('active');
+                            overlay.classList.toggle('active');
+                        }
+                        
+                        openBtn.addEventListener('click', toggleSidebar);
+                        closeBtn.addEventListener('click', toggleSidebar);
+                        overlay.addEventListener('click', toggleSidebar);
+                    }
+                }, 0);
+                
                 initLocalListeners();
             } catch (err) {
                 console.error('Ошибка загрузки шаблона:', err);
             }
         }
-
+        
         function initLocalListeners() {
             document.getElementById("search-cases-btn")?.addEventListener("click", () => console.log("search"));
             document.getElementById("filter-cases-btn")?.addEventListener("click", () => console.log("filter"));
         }
-
+        
         loadHeader();
     </script>
     
