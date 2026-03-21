@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация</title>
+    <title>Регистрация — GETCASE</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -11,167 +13,197 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        @font-face {
+        font-family: VT323;
+        src: url('static/VT323-Regular.woff2');
+        }
         body {
             min-height: 100vh;
-            font-family: system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #4c1d95 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #D8D0F0, #B19CD9);
+            background-attachment: fixed;
+            background-size: cover;
+            color: #111;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 20px 16px;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .back-button {
+        .back-link {
             position: absolute;
             top: 20px;
             left: 20px;
-            color: white;
+            color: #444;
+            font-size: 1.2rem;
             text-decoration: none;
-            font-size: 1.1rem;
             font-weight: 500;
-            opacity: 0.9;
+            opacity: 0.85;
             transition: opacity 0.2s;
         }
 
-        .back-button:hover {
+        .back-link:hover {
             opacity: 1;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-radius: 28px;
-            border: 1px solid rgba(255,255,255,0.18);
-            padding: 40px 36px;
+            padding: 48px 40px;
             width: 100%;
-            max-width: 520px;          /* ← стало шире (было 420px) */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.28);
+            max-width: 520px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            border: 2px solid rgba(124, 94, 181, 0.25);
+            text-align: center;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 36px;
-            font-family: Helvetica, bold;
+        .logo {
+            font-family: VT323;
+            font-size: 5.2rem;
+            color: #7C5EB5;
+            letter-spacing: 4px;
+            margin-bottom: 28px;
+            text-shadow: 2px 2px 0 #A08CD9, -1px -1px 0 rgba(0,0,0,0.08);
+            line-height: 1;
         }
 
         h1 {
-            font-size: 2.3rem;
+            font-size: 2.2rem;
+            color: #222;
             margin-bottom: 10px;
             font-weight: 700;
-            letter-spacing: -0.6px;
         }
 
         .subtitle {
-            font-size: 1.05rem;
-            opacity: 0.88;
-            font-weight: 400;
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 32px;
+            opacity: 0.9;
         }
 
-        .register-form {
+        .form {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            text-align: left;
         }
 
         .form-group {
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         input,
         select {
             width: 100%;
-            padding: 15px 18px;
-            border: none;
+            padding: 15px 20px;
+            font-size: 1.05rem;
+            border: 2px solid #A08CD9;
             border-radius: 16px;
-            background: rgba(255, 255, 255, 0.18);
-            color: white;
-            font-size: 1.03rem;
+            background: rgba(255,255,255,0.8);
+            color: #111;
             transition: all 0.2s;
-            appearance: none;
         }
 
         select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237C5EB5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 18px center;
+            background-position: right 16px center;
             background-size: 16px;
-            cursor: pointer;
-        }
-
-        input::placeholder,
-        select option:disabled {
-            color: rgba(255,255,255,0.65);
+            padding-right: 40px;
         }
 
         input:focus,
         select:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.28);
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+            border-color: #7C5EB5;
+            box-shadow: 0 0 0 4px rgba(124, 94, 181, 0.15);
         }
 
-        .form-hint {
-            font-size: 0.86rem;
-            opacity: 0.78;
-            margin-top: 6px;
-            padding-left: 6px;
-        }
-
-        button {
-            margin-top: 16px;
-            padding: 17px;
-            font-size: 1.08rem;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(90deg, #6d28d9, #8b5cf6);
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 5px 22px rgba(109, 40, 217, 0.4);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 35px rgba(109, 40, 217, 0.55);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .error-message {
-            background: rgba(239, 68, 68, 0.25);
-            border: 1px solid #ef4444;
-            color: #fee2e2;
-            padding: 14px 18px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            font-size: 0.97rem;
-            text-align: center;
+        input::placeholder,
+        select option:disabled {
+            color: #888;
         }
 
         select option[value=""],
         select:invalid {
-            color: rgba(255,255,255,0.6);
+            color: #999;
+        }
+
+        .form-hint {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 4px;
+            padding-left: 4px;
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 18px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(90deg, #7C5EB5, #A08CD9);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 6px 20px rgba(124, 94, 181, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 94, 181, 0.45);
+        }
+
+        .error {
+            background: rgba(255, 100, 100, 0.15);
+            border: 2px solid #ff8080;
+            color: #c00;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        /* Для Jinja flashed messages */
+        .error-message {
+            background: rgba(255, 100, 100, 0.15);
+            border: 2px solid #ff8080;
+            color: #c00;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <a href="/" class="back-button">← На главную</a>
+    <a href="/" class="back-link">← На главную</a>
 
     <div class="container">
-        <div class="header">
-            <h1>Регистрация</h1>
-            <div class="subtitle">Создайте свой аккаунт, чтобы воспользоваться всеми возможностями GetCase</div>
-        </div>
+        <div class="logo">GETCASE</div>
 
-        <div class="error-message" style="display: none;"></div>
+        <h1>Регистрация</h1>
+        <div class="subtitle">Создайте аккаунт, чтобы получить доступ ко всем кейсам</div>
 
-        <form method="POST" class="register-form">
+        <!-- {% with messages = get_flashed_messages() %} -->
+        <!--     {% if messages %} -->
+        <!--         <div class="error-message"> -->
+        <!--             {% for message in messages %} -->
+        <!--                 <p>{{ message }}</p> -->
+        <!--             {% endfor %} -->
+        <!--         </div> -->
+        <!--     {% endif %} -->
+        <!-- {% endwith %} -->
+
+        <form method="POST" class="form">
 
             <div class="form-group">
                 <input type="email" name="email" placeholder="Email для входа" required>
@@ -214,7 +246,7 @@
             </div>
 
             <div class="form-group">
-                <input type="date" name="birthdate" placeholder="Дата рождения" required>
+                <input type="date" name="birthdate" required>
             </div>
 
             <button type="submit">Создать аккаунт</button>
