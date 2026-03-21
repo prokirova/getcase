@@ -1,9 +1,41 @@
-import mysql
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 import os
 from datetime import datetime
 import bcrypt
-import mysql.connector as connector
+
+import mysql.connector
+
+def get_server_connection():
+    return mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='password'
+    )
+
+def init_db():
+    conn = get_server_connection()
+    cur = conn.cursor()
+
+    # если БД не было - создается
+    cur.execute("CREATE DATABASE IF NOT EXISTS GetCase")
+    cur.execute("USE GetCase")
+
+    # Students
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS Students (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        skills JSON,
+        university VARCHAR(255) NOT NULL,
+        faculty VARCHAR(255),
+        course TINYINT NOT NULL,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        phone_number VARCHAR(255) NOT NULL UNIQUE,
+        tg_id VARCHAR(255) UNIQUE,
+        tasks_started JSON,
+        tasks_progressing JSON,
+        password_hash VARCHAR(255) NOT NULL
+    )
+    """)
 
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -105,4 +137,5 @@ def pull_database(data):
 
 
 if __name__ == '__main__':
+    init_db()
     app.run()

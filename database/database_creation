@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `Companies` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
 	`name` VARCHAR(255) NOT NULL,
 	`information` TEXT(65535),
-	`projects` JSON NOT NULL,
+	`projects` JSON,
 	PRIMARY KEY(`id`)
 );
 
