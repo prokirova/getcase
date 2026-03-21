@@ -422,6 +422,90 @@ def get_cases_api():
         print(e)
         return jsonify({"error": str(e)}), 500
 
+@app.route('/my_cases')
+def my_cases():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        # получаем пользователя
+        cur.execute("SELECT tasks_started FROM Students WHERE id = %s", (session['user_id'],))
+        user = cur.fetchone()
+
+        #case_ids = json.loads(user['tasks_started']) if user['tasks_started'] else []
+        raw_tasks = user['tasks_started']
+
+        if not raw_tasks:
+            case_ids = []
+        elif isinstance(raw_tasks, str):
+            case_ids = json.loads(raw_tasks)
+        else:
+            case_ids = raw_tasks
+
+        if not case_ids:
+            return render_template('my_cases.html', cases=[])
+
+        # получаем сами кейсы
+        format_strings = ','.join(['%s'] * len(case_ids))
+        cur.execute(f"""
+            SELECT c.*, comp.name AS company_name
+            FROM Cases c
+            LEFT JOIN Companies comp ON c.organizer_id = comp.id
+            WHERE c.id IN ({format_strings})
+        """, tuple(case_ids))
+
+        cases = cur.fetchall()
+
+        print(user['tasks_started'], type(user['tasks_started']))
+
+        cur.close()
+        db.close()
+
+        return render_template('my_cases.html', cases=cases)
+
+    except Exception as e:
+        print(e)
+        return "Ошибка"
+
+@app.route('/api/join_case/<int:case_id>', methods=['POST'])
+def join_case(case_id):
+    if 'user_id' not in session:
+        return jsonify({"error": "Not authorized"}), 401
+
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        # получаем текущие задачи
+        cur.execute("SELECT tasks_started FROM Students WHERE id = %s", (session['user_id'],))
+        user = cur.fetchone()
+
+        tasks = json.loads(user['tasks_started']) if user['tasks_started'] else []
+
+        # если уже есть — не добавляем
+        if case_id in tasks:
+            return jsonify({"error": "Вы уже участвуете"})
+
+        tasks.append(case_id)
+
+        # обновляем
+        cur.execute(
+            "UPDATE Students SET tasks_started = %s WHERE id = %s",
+            (json.dumps(tasks), session['user_id'])
+        )
+
+        db.commit()
+        cur.close()
+        db.close()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/logout')
 def logout():

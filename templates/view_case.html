@@ -48,10 +48,27 @@
     </style>
 </head>
 <body>
+<button id="join-case-btn">Принять участие</button>
+
+<script>
+document.getElementById("join-case-btn").addEventListener("click", () => {
+    fetch(`/api/join_case/{{ case_id }}`, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Вы записались на кейс!");
+        } else {
+            alert(data.error);
+        }
+    });
+});
+</script>
 
 <div class="container">
     <div id="caseContent">Загрузка...</div>
-    <a href="/" class="btn">Назад</a>
+    <a href="/cases" class="btn">Назад</a>
 </div>
 
 <script>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои кейсы</title>
+</head>
+<body>
+
+<h1>Мои кейсы</h1>
+
+{% if cases %}
+    {% for case in cases %}
+        <div style="border:1px solid black; padding:10px; margin:10px;">
+            <h3>{{ case.company_name }}</h3>
+            <p>{{ case.description }}</p>
+            <a href="/case/{{ case.id }}">Открыть кейс</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>У вас пока нет кейсов</p>
+{% endif %}
+
+<a href="/">
+    <button>Вернуться на главную</button>
+</a>
+
+</body>
+</html>
