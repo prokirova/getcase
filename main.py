@@ -295,18 +295,7 @@ def get_cases_from_user(userid):
     return result_sorted
 
 
-@app.route('/profile')
-@app.route('/profile/<username>')
-def profile(username=None):
-    # если пользователь авторизован — можно показывать свой профиль
-    if 'user_id' in session:
-        # user = get_current_user_from_session()
-        # return render_template('profile.html', user=user)
-        pass
 
-    # пока показываем пример / любой профиль по username
-    user_data = get_user_data(username or "example")
-    return render_template('profile.html', user=user_data)
 
 
 if __name__ == '__main__':
