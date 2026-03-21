@@ -2,15 +2,16 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 import os
 from datetime import datetime
 import bcrypt
-import mysql.connector
 
+import mysql.connector
 
 def get_server_connection():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='new_password'
+        password='password'
     )
+
 
 def init_db():
     conn = get_server_connection()
@@ -70,30 +71,9 @@ def init_db():
     cur.close()
     conn.close()
 
+
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback_secret_key_if_not_set')
-init_db()
-
-def get_user_data(user_id):
-    # Здесь должна быть логика получения из БД
-    return {
-        "full_name": "Шарипов Сармат",
-        "first_name": "Сармат",
-        "username": "The_Pharma",
-        "avatar_url": None,
-        "university": 'Российский технологический университет "МИРЭА"',
-        "institute": "Институт кибербезопасности и цифровых технологий",
-        "specialty": "Фундаментальная информатика и информационные технологии",
-        "course": 2,
-        "degree": "бакалавриат",
-        "email": "sarmatsharipov228@gmail.com",
-        "phone": "+797775199474",
-        "telegram": "@The_Pharma",
-        "skills": [
-            "Python", "Анализ данных", "Работа в команде",
-            "Веб-аналитика", "Машинное обучение", "SQL"
-        ]
-    }
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -146,15 +126,15 @@ def register():
 
             # вставка
             cur.execute("""
-                    INSERT INTO Students (
-                        last_name, first_name, middle_name,
-                        email, phone_number, password_hash,
-                        university, faculty, specialty, course,
-                        birthdate,
-                        skills, tg_id, tasks_started, tasks_progressing
-                    )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (
+                INSERT INTO Students (
+                    last_name, first_name, middle_name,
+                    email, phone_number, password_hash,
+                    university, faculty, specialty, course,
+                    birthdate,
+                    skills, tg_id, tasks_started, tasks_progressing
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
                 last_name,
                 first_name,
                 middle_name,
@@ -176,8 +156,9 @@ def register():
                 '[]'
             ))
 
-            # cur.execute("SELECT * FROM Students ORDER BY id DESC LIMIT 1")
-            # new_user = cur.fetchone()
+            #cur.execute("SELECT * FROM Students ORDER BY id DESC LIMIT 1")
+            #new_user = cur.fetchone()
+
 
             db.commit()
             cur.close()
@@ -186,7 +167,7 @@ def register():
             flash('Регистрация успешна!')
             return redirect(url_for('login'))
 
-            # return jsonify(new_user)
+            #return jsonify(new_user)
 
         except Exception as e:
             print(e)
@@ -230,12 +211,15 @@ def login():
 
     return render_template('login.html')
 
+
+
+
 def get_database():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='new_password',
-        database='getcase'
+        password='password',
+        database='GetCase'
     )
 
 def push_to_database(data):
@@ -296,7 +280,6 @@ def get_cases_from_user(userid):
 
 
 
-
-
 if __name__ == '__main__':
-    app.run()
+    init_db()
+    app.run(debug=True)
