@@ -276,30 +276,39 @@
 
     <div class="sidebar-wrapper-js"></div>
     <script>
-        document.getElementsByClassName("sidebar-wrapper")[0].innerHTML=localStorage.getItem("headerTemplate");
-        const wrapperjs = document.getElementsByClassName("sidebar-wrapper-js")[0];
-        const scriptHtml = localStorage.getItem("headerTemplateScript");
-        
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = scriptHtml;
-        const script = tempDiv.querySelector('script');
-        if (script) {
-            const newScript = document.createElement('script');
-            newScript.textContent = script.textContent;
-            document.body.appendChild(newScript);
-        }
-        
-        // Кнопка поиска кейсов
-        const searchCaseBtn = document.getElementById("search-cases-btn");
-        searchCaseBtn.addEventListener("click", () => {
-            console.log("search")
-        });
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const text = await response.text();
+                
+                // Создаем временный элемент для парсинга
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = text;
 
-        // Кнопка фильтрации поиска
-        const filterCaseBtn = document.getElementById("filter-cases-btn");
-        filterCaseBtn.addEventListener("click", () => {
-            console.log("filter")
-        });
+                // Вставляем HTML
+                const wrapper = document.querySelector('.sidebar-wrapper');
+                const headerContent = tempDiv.querySelector('.sidebar-wrapper').innerHTML;
+                wrapper.innerHTML = headerContent;
+
+                // Извлекаем и запускаем скрипт сайдбара
+                const scriptContent = tempDiv.querySelector('.sidebar-wrapper-js script').textContent;
+                const newScript = document.createElement('script');
+                newScript.textContent = scriptContent;
+                document.body.appendChild(newScript);
+
+                // Инициализируем поиск (ваши старые обработчики)
+                initLocalListeners();
+            } catch (err) {
+                console.error('Ошибка загрузки шаблона:', err);
+            }
+        }
+
+        function initLocalListeners() {
+            document.getElementById("search-cases-btn")?.addEventListener("click", () => console.log("search"));
+            document.getElementById("filter-cases-btn")?.addEventListener("click", () => console.log("filter"));
+        }
+
+        loadHeader();
     </script>
     
 </body>
