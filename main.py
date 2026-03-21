@@ -95,7 +95,7 @@ def register():
         conn = get_db_connection()
         cur = conn.cursor()
 
-        cur.execute("SELECT id FROM users WHERE email = ?", (email,))
+        cur.execute("SELECT id FROM users WHERE email = %s", (email,))
         if cur.fetchone():
             flash('Пользователь с таким email уже существует')
             cur.close()
@@ -159,26 +159,39 @@ def get_database():
 def push_to_database(data):
     db = get_database()
     cur = db.cursor()
-    if data[0] == "student":
+    command = ("INSERT INTO Companies", "(name,information,projects)")
+    if data[0] == "Students":
         command = ("INSERT INTO Students", "(skills, university, faculty, course, email, phone_number, tg_id, tasks_started, tasks_progressing, password_hash)", data[1])
-    if data[0] == "company":
-        command = ("INSERT INTO Companies", "(name,information,projects)", data[1])
-    if data[0] == "case":
-        command = ("INSERT INTO Cases", "(organizer_id,performers,description,areas,publication_time,end_time)", data[1])
-    cur.execute(command)
+    if data[0] == "Companies":
+        command = ("INSERT INTO Companies", "(name,information,projects)")
+    if data[0] == "Cases":
+        command = ("INSERT INTO Cases", "(organizer_id,performers,description,areas,publication_time,end_time)")
+    else:
+        return
+    cur.execute(command,data[1])
     db.commit()
 
 def update_database(data):
     db = get_database()
     cur = db.cursor()
-    command = ("UPDATE %s SET  WHERE id = ?", data[1], data[0])
+    if data[0] == "Students":
+        command = ("UPDATE Students SET skills = %s, university = %s, faculty = %s, course = %s, email = %s, phone_number = %s, tg_id=%s, tasks_started=%s, tasks_progressing=%s, password_hash=%s")
+    if data[0] == "Companies":
+        command = ("UPDATE Companies SET name = %s, information = %s, projects=%s")
+    if data[0] == "Cases":
+        command = "UPDATE Cases SET organizer_Id = %s, performers = %s, description = %s, areas = %s, publication_time = %s, end_time =%s"
+    else:
+        return
+    cur.execute(command, data[1])
 
 
 def pull_database(data):
     db = get_database()
     cur = db.cursor()
-    command = ("SELECT * FROM %s WHERE id = ?", data[1])
-    cur.execute(command, data[0])
+    if data[0] != "Students" and data[0] != "Companies" and data[0] != "Cases":
+        return
+    command = ("SELECT * FROM %s WHERE id = %s")
+    cur.execute(command, data)
     result = cur.fetchall()
     return result
 
