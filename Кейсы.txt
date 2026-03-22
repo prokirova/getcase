@@ -1,0 +1,244 @@
+INSERT INTO Companies (name) VALUES ('Яндекс');
+INSERT INTO Companies (name) VALUES ('Сбер');
+INSERT INTO Companies (name) VALUES ('VK');
+INSERT INTO Companies (name) VALUES ('Ozon');
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    1,
+    '[]',
+    'Разработка нейросети для улучшения качества распознавания речи в шумной среде для голосового помощника.',
+    '["AI", "Python", "NLP"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    1,
+    '[]',
+    'Оптимизация алгоритмов построения маршрутов в Яндекс.Картах с учетом пробок в реальном времени.',
+    '["Algorithms", "Backend", "C++"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 14 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    1,
+    '[]',
+    'Создание микросервиса для обработки логов поисковых запросов с высокой нагрузкой.',
+    '["Backend", "Go", "Highload"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    1,
+    '[]',
+    'Разработка интерфейса для визуализации статистики Яндекс.Метрики на frontend.',
+    '["Frontend", "JavaScript", "React"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    2,
+    '[]',
+    'Модель машинного обучения для предсказания оттока клиентов банка.',
+    '["Data Science", "ML", "Python"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 15 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    2,
+    '[]',
+    'Разработка защищенного API для мобильного приложения СберБанк Онлайн.',
+    '["Security", "Backend", "Java"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    2,
+    '[]',
+    'Автоматизация тестирования банковских транзакций с помощью CI/CD пайплайнов.',
+    '["DevOps", "QA", "Automation"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 20 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    2,
+    '[]',
+    'Анализ больших данных для сегментации целевой аудитории кредитных продуктов.',
+    '["Analytics", "Big Data", "SQL"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    3,
+    '[]',
+    'Улучшение рекомендательной системы для ленты новостей на основе графовых связей.',
+    '["AI", "Backend", "Machine Learning"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 12 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    3,
+    '[]',
+    'Разработка бота для модерации комментариев в сообществах с использованием NLP.',
+    '["AI", "Python", "NLP"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    3,
+    '[]',
+    'Оптимизация видеостриминга для снижения задержек при прямых эфирах.',
+    '["Backend", "Video", "C++"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 18 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    3,
+    '[]',
+    'Создание кроссплатформенного мобильного виджета для быстрой публикации сторис.',
+    '["Mobile", "iOS", "Android"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 25 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    4,
+    '[]',
+    'Алгоритм оптимизации складских запасов для предотвращения дефицита товаров.',
+    '["Algorithms", "Analytics", "Python"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 14 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    4,
+    '[]',
+    'Разработка поискового движка для товарной витрины с учетом синонимов и опечаток.',
+    '["Backend", "Search", "Elasticsearch"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+);
+
+INSERT INTO Cases (
+    organizer_id,
+    performers,
+    description,
+    areas,
+    publication_time,
+    end_time
+) VALUES (
+    4,
+    '[]',
+    'Система мониторинга статуса доставки курьеров в реальном времени.',
+    '["Backend", "IoT", "Go"]',
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY)
+);
