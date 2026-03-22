@@ -10,7 +10,7 @@ def get_server_connection():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='new_password'
+        password='password'
     )
 
 
@@ -228,8 +228,8 @@ def get_database():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='new_password',
-        database='getcase'
+        password='password',
+        database='GetCase'
     )
 
 
