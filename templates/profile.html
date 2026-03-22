@@ -23,7 +23,7 @@
 
                 <div class="bio-row">
                     <p class="user-bio-title">Курс</p>
-                    <input type="text" id="course" class="edit-input" value="{{ user.course }}">
+                    <input type="number" id="course" class="edit-input" value="{{ user.course }}" min="1" max="10">
                 </div>
 
                 <div class="bio-row">
@@ -38,7 +38,7 @@
 
                 <div class="bio-row">
                     <p class="user-bio-title">Email</p>
-                    <input type="email" id="email" class="edit-input" value="{{ user.email }}">
+                    <input type="email" id="email" class="edit-input" value="{{ user.email }}" readonly>
                 </div>
 
                 <div class="bio-row">
@@ -296,9 +296,18 @@
             }
         }
 
-        // Вешаем сохранение при потере фокуса на всех полях
+        // === DEBOUNCE (чтобы не слать 100 запросов пока печатаешь) ===
+        let timeout = null;
+
+        function debounceSave() {
+            clearTimeout(timeout);
+            timeout = setTimeout(saveProfile, 500);
+        }
+
+        // Вешаем события
         autoSaveInputs.forEach(input => {
-            input.addEventListener('blur', saveProfile);
+            input.addEventListener('input', debounceSave); // когда печатаешь
+            input.addEventListener('blur', saveProfile);   // когда ушёл с поля
         });
 
         // === НАВЫКИ ===

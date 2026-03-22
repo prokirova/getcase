@@ -662,23 +662,35 @@ def update_profile():
         db = get_database()
         cur = db.cursor()
 
+        full_name = data.get('full_name', '').strip()
+
+        parts = full_name.split()
+
+        last_name = parts[0] if len(parts) > 0 else ''
+        first_name = parts[1] if len(parts) > 1 else ''
+        middle_name = parts[2] if len(parts) > 2 else ''
+
         cur.execute("""
         UPDATE Students SET
+            last_name=%s,
+            first_name=%s,
+            middle_name=%s,
             university=%s,
             faculty=%s,
             specialty=%s,
             course=%s,
-            email=%s,
             phone_number=%s,
             tg_id=%s,
             skills=%s
         WHERE id=%s
         """, (
+            last_name,
+            first_name,
+            middle_name,
             data['university'],
             data['faculty'],
             data['specialty'],
             int(data['course']),
-            data['email'],
             data['phone'],
             data['tg_id'],
             json.dumps(data['skills']),
