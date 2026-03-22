@@ -345,9 +345,13 @@
                 <span></span>
             </button>
 
-            <a href="/login" class="profile-btn">
-                <img src="/static/Person.png" alt="Профиль" class="profile-img">
-            </a>
+            {% if session.get('user_id') %}
+                <a href="/profile" class="profile-btn">
+            {% else %}
+                <a href="/login" class="profile-btn">
+            {% endif %}
+                    <img src="/static/Person.png" alt="Профиль" class="profile-img">
+                </a>
         </div>
     </header>
 
