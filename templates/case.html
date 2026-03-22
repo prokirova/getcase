@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Инвестиции</title>
+  <title>Просмотр кейса</title>
   <style>
     body {
       margin: 0;
@@ -11,126 +11,348 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
+      color: #222;
       min-width: 600px;
     }
 
-    .container {
-      padding: 40px;
-    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px; }
 
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 30px;
     }
 
-    .left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+    .left { display: flex; align-items: center; gap: 25px; }
 
     .logo {
-      width: 150px;
-      height: 150px;
-      min-width: 150px;
-      min-height: 160px;
+      width: 140px;
+      height: 140px;
+      min-width: 140px;
       border-radius: 50%;
       background: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     }
 
-    h1 {
-      font-size: 36px;
-      margin: 0;
-      color: #222;
-    }
+    h1 { font-size: 34px; margin: 0; color: #1a1a2e; line-height: 1.2; }
 
-    .tags {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+    .case-id { font-size: 20px; color: #444; margin-top: 6px; }
+
+    .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 12px; }
 
     .tag {
       background: #6c63ff;
       color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 18px;
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 17px;
     }
 
-    .deadline {
+    .info-line {
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 20px;
+      gap: 6px;
+      font-size: 19px;
       color: #333;
+      margin-top: 8px;
     }
 
     .button {
       background: #6c63ff;
       color: white;
-      padding: 12px 24px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-size: 16px;
+      padding: 13px 28px;
+      border-radius: 30px;
+      font-size: 17px;
+      font-weight: 500;
+      transition: background 0.2s;
+      border: none;
+      cursor: pointer;
     }
+
+    .button:hover { background: #5a52e0; }
+    .button:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .card {
-      margin-top: 30px;
-      background: #eee;
-      border-radius: 25px;
-      padding: 30px;
-      color: #555;
-      line-height: 1.6;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 24px;
+      padding: 32px;
+      color: #333;
+      line-height: 1.65;
+      font-size: 17px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
     }
 
-    .files {
+    .card h3 { margin-top: 0; color: #1a1a2e; font-size: 22px; }
+
+    .back-btn {
+      display: inline-block;
       margin-top: 20px;
-      display: flex;
-      gap: 15px;
-      font-size: 18px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.25);
+      color: #333;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
     }
 
-    .file-btn {
-      display: flex;
+    .back-btn:hover { background: rgba(255,255,255,0.4); }
+
+    /* Модалка */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
       align-items: center;
-      gap: 10px;
-      background: #6c63ff;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      text-decoration: none;
+      justify-content: center;
+      z-index: 1000;
     }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .close { font-size: 28px; cursor: pointer; color: #777; }
+
+    .files-list {
+      margin-top: 20px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 12px;
+    }
+
+    .file-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .file-item:last-child { border-bottom: none; }
   </style>
 </head>
 <body>
+
   <div class="container">
     <div class="header">
       <div class="left">
         <div class="logo"></div>
         <div>
-          <h1>Разработка мобильного приложения<br>для инвестиций</h1>
-          <div class="tags">
-            <div class="tag">IT</div>
-            <div class="tag">Финансы</div>
-            <div class="tag">UX/UI Design</div>
-            <div class="deadline">⏱ До 03.04.26</div>
-          </div>
+          <h1 id="case-title">Загрузка кейса...</h1>
+          <div class="case-id" id="case-id"></div>
+          <div class="tags" id="tags"></div>
         </div>
       </div>
-      <a href="#" class="button">Начать работу</a>
+
+      <div id="action-buttons">
+        <button id="join-case-btn" class="button">Принять участие</button>
+      </div>
     </div>
 
-    <div class="card">
-      Разработать мобильное приложение для инвестиций с функциями регистрации, просмотра портфеля, покупки/продажи акций и пополнения счёта. Спроектировать UI/UX-дизайн всех экранов в Figma с учётом мобильных паттернов и доступности. Реализовать клиентскую часть на Flutter/React Native с интеграцией API брокера для получения котировок в реальном времени. Настроить безопасную авторизацию с двухфакторной аутентификацией и биометрией, подключить платёжный шлюз для транзакций. Провести тестирование функционала, исправить баги и подготовить демо-версию для iOS и Android. Оформить исходный код на GitHub, написать техническую документацию и защитить проект перед заказчиком с презентацией результатов. Разработать систему уведомлений о сделках и изменениях рынка. Реализовать образовательный модуль со статьями и тестами для начинающих инвесторов. Обеспечить соответствие требованиям 152-ФЗ и стандартам безопасности финансовых приложений. Подготовить презентацию проекта с демонстрацией ключевого функционала и метрик производительности.
+    <div class="card" id="caseContent"></div>
+
+    <div id="my-files-section" style="display:none;">
+      <h3 style="margin-bottom:12px;">Мои отправленные решения</h3>
+      <div class="files-list" id="files-list"></div>
     </div>
 
-    <div class="files">
-      <a href="#" class="file-btn">📄 Файл 1</a>
-      <a href="#" class="file-btn">📄 Файл 2</a>
+    <a href="/cases" class="back-btn">← Назад к списку кейсов</a>
+  </div>
+
+  <!-- Модальное окно для загрузки файла -->
+  <div id="upload-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Отправить решение</h2>
+        <span class="close" id="close-modal">&times;</span>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.doc,.docx,.zip,.rar,.png,.jpg,.jpeg">
+      <p style="margin: 15px 0; color: #555; font-size: 14px;">
+        Максимальный размер: 50 МБ<br>
+        Рекомендуемые форматы: PDF, Word, архивы, изображения
+      </p>
+      <button id="submit-file-btn" class="button" style="width:100%;">Отправить файл</button>
     </div>
   </div>
+
+  <script>
+    const caseId = window.location.pathname.split('/').pop();
+    let hasJoined = false; // можно потом заменить на реальную проверку с бэкенда
+
+    // -------------------------------------------------------------------------
+    // Форматирование даты
+    // -------------------------------------------------------------------------
+    function formatRussianDate(isoDate) {
+      if (!isoDate) return '—';
+      try {
+        const date = new Date(isoDate);
+        if (isNaN(date)) return '—';
+        return date.toLocaleDateString('ru-RU', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      } catch {
+        return isoDate;
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;',
+        '"': '&quot;', "'": '&#039;'
+      })[m]);
+    }
+
+
+    async function loadCase() {
+      try {
+        const res = await fetch(`/api/cases/${caseId}`);
+        if (!res.ok) throw new Error("Не удалось загрузить кейс");
+        const data = await res.json();
+
+        document.getElementById("case-title").textContent = data.company_name || "Кейс без названия";
+        document.getElementById("case-id").textContent = `Кейс #${data.id}`;
+
+        const areas = JSON.parse(data.areas || '[]');
+        document.getElementById("tags").innerHTML = areas
+          .map(a => `<div class="tag">${escapeHtml(a)}</div>`).join('');
+
+        const performers = JSON.parse(data.performers || '[]');
+
+        document.getElementById("caseContent").innerHTML = `
+          <h3>Описание</h3>
+          <p>${escapeHtml(data.description || 'Описание отсутствует')}</p>
+
+          ${performers.length ? `
+            <h3>Текущие / желаемые участники</h3>
+            <div class="tags">
+              ${performers.map(p => `<div class="tag">${escapeHtml(p)}</div>`).join('')}
+            </div>
+          ` : ''}
+
+          <h3>Сроки</h3>
+          <div class="info-line">⏱ Дедлайн: ${formatRussianDate(data.end_time)}</div>
+        `;
+
+        // Здесь можно запросить статус участия пользователя
+        // await checkParticipationStatus();
+
+      } catch (e) {
+        document.getElementById("caseContent").innerHTML = `<h3>Ошибка</h3><p>${e.message}</p>`;
+      }
+    }
+
+
+    document.getElementById("join-case-btn").addEventListener("click", async () => {
+      try {
+        const res = await fetch(`/api/join_case/${caseId}`, { method: "POST" });
+        const data = await res.json();
+
+        if (data.success) {
+  hasJoined = true;
+  updateActionButtons();
+  alert(data.message);
+}
+      } catch (err) {
+        alert("Ошибка сети");
+      }
+    });
+
+    function updateActionButtons() {
+      const container = document.getElementById("action-buttons");
+      if (hasJoined) {
+        container.innerHTML = `
+          <button id="submit-solution-btn" class="button">Отправить решение</button>
+        `;
+        document.getElementById("submit-solution-btn").addEventListener("click", openUploadModal);
+        document.getElementById("my-files-section").style.display = "block";
+      } else {
+        container.innerHTML = `
+          <button id="join-case-btn" class="button">Принять участие</button>
+        `;
+        document.getElementById("join-case-btn").addEventListener("click", arguments.callee);
+      }
+    }
+
+    const modal = document.getElementById("upload-modal");
+    const closeBtn = document.getElementById("close-modal");
+    const fileInput = document.getElementById("file-input");
+    const submitBtn = document.getElementById("submit-file-btn");
+
+    function openUploadModal() {
+      modal.style.display = "flex";
+      fileInput.value = ""; // сбрасываем выбор
+    }
+
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+
+    submitBtn.addEventListener("click", async () => {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Выберите файл");
+        return;
+      }
+
+      if (file.size > 50 * 1024 * 1024) {
+        alert("Файл слишком большой (максимум 50 МБ)");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("case_id", caseId);
+
+      try {
+        const res = await fetch("/api/submit_solution", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert("Решение успешно отправлено!");
+          modal.style.display = "none";
+
+          // Показываем файл локально
+          addLocalFileDisplay(file.name);
+          // fileInput.value = "";
+        } else {
+          alert(data.error || "Ошибка при отправке файла");
+        }
+      } catch (err) {
+        alert("Ошибка сети при загрузке");
+      }
+    });
+
+    function addLocalFileDisplay(filename) {
+      const list = document.getElementById("files-list");
+      const item = document.createElement("div");
+      item.className = "file-item";
+      item.innerHTML = `📄 ${escapeHtml(filename)} <small>(отправлено)</small>`;
+      list.appendChild(item);
+    }
+
+
+    loadCase();
+    // updateActionButtons();   ← раскомментировать, если нужно сразу показать по статусу
+  </script>
 </body>
 </html>

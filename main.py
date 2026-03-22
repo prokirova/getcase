@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 import os
 from datetime import datetime
 import bcrypt
+from werkzeug.utils import secure_filename
 
 import mysql.connector
 
@@ -9,7 +10,7 @@ def get_server_connection():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='password'
+        password='new_password'
     )
 
 
@@ -74,6 +75,14 @@ def init_db():
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback_secret_key_if_not_set')
+UPLOAD_FOLDER = 'solutions'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'zip', 'rar', 'png', 'jpg', 'jpeg'}
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 102
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -219,8 +228,8 @@ def get_database():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='password',
-        database='GetCase'
+        password='new_password',
+        database='getcase'
     )
 
 
@@ -456,7 +465,7 @@ def view_case(case_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    return render_template('view_case.html', case_id=case_id)
+    return render_template('case.html', case_id=case_id)
 
 
 @app.route('/api/cases/<int:case_id>', methods=['GET'])
@@ -573,39 +582,69 @@ def my_cases():
 @app.route('/api/join_case/<int:case_id>', methods=['POST'])
 def join_case(case_id):
     if 'user_id' not in session:
-        return jsonify({"error": "Not authorized"}), 401
+        return jsonify({"error": "Не авторизован"}), 401
 
     try:
         db = get_database()
         cur = db.cursor(dictionary=True)
 
-        # получаем текущие задачи
         cur.execute("SELECT tasks_started FROM Students WHERE id = %s", (session['user_id'],))
         user = cur.fetchone()
 
-        tasks = json.loads(user['tasks_started']) if user['tasks_started'] else []
+        if not user:
+            return jsonify({"error": "Пользователь не найден"}), 404
 
-        # если уже есть — не добавляем
-        if case_id in tasks:
-            return jsonify({"error": "Вы уже участвуете"})
+        tasks = json.loads(user['tasks_started'] or '[]')
 
-        tasks.append(case_id)
+        already_participating = case_id in tasks
 
-        # обновляем
-        cur.execute(
-            "UPDATE Students SET tasks_started = %s WHERE id = %s",
-            (json.dumps(tasks), session['user_id'])
-        )
+        if not already_participating:
+            tasks.append(case_id)
+            cur.execute(
+                "UPDATE Students SET tasks_started = %s WHERE id = %s",
+                (json.dumps(tasks), session['user_id'])
+            )
+            db.commit()
+            message = "Вы успешно записались"
+        else:
+            message = "Вы уже участвуете"
 
-        db.commit()
         cur.close()
         db.close()
 
-        return jsonify({"success": True})
+        return jsonify({
+            "success": True,
+            "message": message,
+            "already_participating": already_participating
+        })
 
     except Exception as e:
         print(e)
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/submit_solution', methods=['POST'])
+def submit_solution():
+    if 'file' not in request.files:
+        return jsonify({"success": False, "error": "Файл не найден"}), 400
+
+    file = request.files['file']
+    case_id = request.form.get('case_id')
+
+    if not case_id:
+        return jsonify({"success": False, "error": "case_id обязателен"}), 400
+
+    if file.filename == '':
+        return jsonify({"success": False, "error": "Файл не выбран"}), 400
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Можно сделать уникальное имя, например: user_id + case_id + timestamp
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], f"case_{case_id}_{filename}")
+        file.save(save_path)
+        return jsonify({"success": True, "message": "Файл загружен"})
+
+    return jsonify({"success": False, "error": "Недопустимый формат файла"}), 400
 
 @app.route('/logout')
 def logout():
