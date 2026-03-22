@@ -1,14 +1,8 @@
--- ==========================================
--- КОМПАНИИ
--- ==========================================
 INSERT INTO Companies (name) VALUES ('Яндекс');
 INSERT INTO Companies (name) VALUES ('Сбер');
 INSERT INTO Companies (name) VALUES ('VK');
 INSERT INTO Companies (name) VALUES ('Ozon');
 
--- ==========================================
--- КЕЙСЫ ДЛЯ ЯНДЕКС (organizer_id = 1)
--- ==========================================
 INSERT INTO Cases (
     organizer_id,
     performers,
@@ -73,9 +67,6 @@ INSERT INTO Cases (
     DATE_ADD(CURDATE(), INTERVAL 21 DAY)
 );
 
--- ==========================================
--- КЕЙСЫ ДЛЯ СБЕР (organizer_id = 2)
--- ==========================================
 INSERT INTO Cases (
     organizer_id,
     performers,
@@ -140,9 +131,6 @@ INSERT INTO Cases (
     DATE_ADD(CURDATE(), INTERVAL 30 DAY)
 );
 
--- ==========================================
--- КЕЙСЫ ДЛЯ VK (organizer_id = 3)
--- ==========================================
 INSERT INTO Cases (
     organizer_id,
     performers,
@@ -207,9 +195,6 @@ INSERT INTO Cases (
     DATE_ADD(CURDATE(), INTERVAL 25 DAY)
 );
 
--- ==========================================
--- КЕЙСЫ ДЛЯ OZON (organizer_id = 4)
--- ==========================================
 INSERT INTO Cases (
     organizer_id,
     performers,
