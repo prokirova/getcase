@@ -347,25 +347,9 @@
             </div>
         </section>
 
-        <section id="all-cases-container">
-            <div class="case-card">
-                <h3>Дизайн-система</h3>
-                <p>Полное руководство по разработке масштабируемой библиотеки компонентов для крупного ритейл-проекта.</p>
-                <button class="open-case-btn">Открыть кейс</button>
-            </div>
-            
-            <div class="case-card">
-                <h3>Личный кабинет Sber</h3>
-                <p>Оптимизация пользовательского пути в мобильном приложении и обновление UI-кита.</p>
-                <button class="open-case-btn">Открыть кейс</button>
-            </div>
-
-            <div class="case-card">
-                <h3>Маркетплейс OZON</h3>
-                <p>Рефакторинг системы фильтрации товаров и улучшение конверсии на этапе корзины.</p>
-                <button class="open-case-btn">Открыть кейс</button>
-            </div>
-        </section>
+        <!-- используется заполнение данных через эндпоинт /api/cases
+             см. функцию loadCases() ниже -->
+        <section id="all-cases-container"></section>
     </div>
 
     <script>
@@ -389,6 +373,45 @@
             const query = document.querySelector('input[type="search"]').value;
             if(query) alert("Ищем: " + query);
         });
+
+        async function loadCases() {
+            try {
+                const res = await fetch('/api/cases');
+                const data = await res.json();
+
+                const container = document.getElementById('all-cases-container');
+
+                if (!res.ok) {
+                    container.innerHTML = "Ошибка загрузки";
+                    return;
+                }
+
+                if (data.length === 0) {
+                    container.innerHTML = "Нет кейсов";
+                    return;
+                }
+
+                container.innerHTML = data.map(c => `
+                    <div class="case-card">
+                        <h3>${c.company_name || 'Компания'}</h3>
+                        <p>${c.description.slice(0, 120)}</p>
+                        <button class="open-case-btn" onclick="openCase(${c.id})">
+                            Открыть кейс
+                        </button>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                document.getElementById('all-cases-container').innerHTML =
+                    "Ошибка: " + e.message;
+            }
+        }
+
+        function openCase(id) {
+            window.location.href = `/case/${id}`;
+        }
+
+        loadCases();
     </script>
 </body>
 </html>

@@ -276,6 +276,109 @@ def pull_database(data):
     result = cur.fetchall()
     return result
 
+# тестовая генерация данных для кейсов
+def generate_artificial_cases():
+    db = get_database()
+    cur = db.cursor()
+
+    try:
+        # проверка наличия компаний для кейсов
+        cur.execute("SELECT COUNT(*) FROM Companies")
+        count = cur.fetchone()[0]
+
+        if count == 0:
+            cur.executemany("""
+                INSERT INTO Companies (name, information, projects)
+                VALUES (%s, %s, %s)
+            """, [
+                ("Yandex", "Tech ecosystem", "[]"),
+                ("Ozon", "Marketplace platform", "[]"),
+                ("Sber", "Banking and tech", "[]")
+            ])
+            db.commit()
+
+        # получение ID компаний
+        cur.execute("SELECT id FROM Companies LIMIT 3")
+        companies = cur.fetchall()
+
+        if len(companies) < 3:
+            print("Недостаточно компаний")
+            return
+
+        c1, c2, c3 = [c[0] for c in companies]
+
+        # добавление кейсов
+        cur.executemany("""
+            INSERT INTO Cases (
+                organizer_id,
+                performers,
+                description,
+                areas,
+                publication_time,
+                end_time
+            )
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, [
+            (
+                c1,
+                '[]',
+                "Разработка рекомендательной системы для пользователей",
+                '["ML", "Python"]',
+                "2025-03-01",
+                "2025-04-01"
+            ),
+            (
+                c2,
+                '[]',
+                "Оптимизация UX корзины маркетплейса",
+                '["Frontend", "UX"]',
+                "2025-03-05",
+                "2025-04-10"
+            ),
+            (
+                c3,
+                '[]',
+                "Анализ пользовательских данных и сегментация",
+                '["Data Science"]',
+                "2025-03-10",
+                "2025-04-15"
+            )
+        ])
+
+        db.commit()
+        print("Тестовые кейсы успешно добавлены")
+
+    except Exception as e:
+        print("Ошибка при заполнении:", e)
+
+    finally:
+        cur.close()
+        db.close()
+
+
+# ИСПОЛЬЗОВАТЬ ОСОБО ОСТОРОЖНО
+# тестовая очистка данных кейсов и компаний из БД
+def clear_test_data():
+    db = get_database()
+    cur = db.cursor()
+
+    try:
+        # удаление кейсов
+        cur.execute("DELETE FROM Cases")
+
+        # удаление компаний
+        cur.execute("DELETE FROM Companies")
+
+        db.commit()
+        print("Тестовые данные удалены")
+
+    except Exception as e:
+        print("Ошибка при очистке:", e)
+
+    finally:
+        cur.close()
+        db.close()
+
 def date_to_days(date):
     year = int(date[0:4])
     month = int(date[5:7])
@@ -397,9 +500,6 @@ def all_cases():
 
 @app.route('/api/cases', methods=['GET'])
 def get_cases_api():
-    if 'user_id' not in session:
-        return jsonify({"error": "Not authorized"}), 401
-
     try:
         db = get_database()
         cur = db.cursor(dictionary=True)
@@ -516,4 +616,12 @@ def logout():
 
 if __name__ == '__main__':
     init_db()
+    # Функция создания искусственных кейсов
+    # в БД для тестра размещения данных
+    # generate_artificial_cases()
+
+    # удаление для тестовых данных кейсов и компаний
+    # ИСПОЛЬЗОВАТ ОСОБО ОСТОРОЖНО
+    # clear_test_data()
+
     app.run(debug=True)
