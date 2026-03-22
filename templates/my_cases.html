@@ -4,14 +4,28 @@
     <meta charset="UTF-8">
     <title>Мои кейсы</title>
     <style>
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --bg-gradient: linear-gradient(135deg, #9198e5, #D8C3F9);
+            --sidebar-width: 300px;
+        }
+		
+		* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background: var(--bg-gradient);
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
             font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
             min-height: 100vh;
-            color: #000000;
+            color: var(--text-color);
             overflow-x: hidden;
         }
 
@@ -19,22 +33,6 @@
             font-family: 'VT323';
             src: url('/static/VT323-Regular.woff2') format('woff2');
             /* Если шрифт локально не подгрузится, используем моноширинный по умолчанию */
-        }
-
-        .back-link {
-            position: absolute;
-            top: 40px;
-            right: 50px;
-            color: white;
-            font-size: 1.2rem;
-            text-decoration: none;
-            font-weight: 500;
-            opacity: 0.9;
-            transition: opacity 0.2s;
-        }
-
-        .back-link:hover {
-            opacity: 1;
         }
 
         #page-title,
@@ -94,43 +92,225 @@
             font-weight: bold;
             text-decoration: none;
         }
+
+        		/* --- Шапка (Header) --- */
+        .main-header {
+            background-color: transparent;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 97%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .profile-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: 0.2s;
+            overflow: hidden;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.28);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Сайдбар (Sidebar) --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+		
+		#main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 120px;
+            padding-bottom: 50px;
+        }
     </style>
 </head>
+
 <body>
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-<h1 id="page-title">Мои кейсы</h1>
-
-<div id="main-container">
-    {% if cases %}
-        <div class="grid">
-            {% for case in cases %}
-                <div class="card">
-                    <div class="company">{{ case.company_name }}</div>
-
-                    <div class="title">
-                        {{ case.description[:60] }}{% if case.description|length > 60 %}...{% endif %}
-                    </div>
-
-                    <div class="desc">
-                        {{ case.description[:120] }}
-                    </div>
-
-                    <div class="footer">
-                        До: {{ case.end_time }}
-                    </div>
-
-                    <a href="/case/{{ case.id }}" class="btn">
-                        Просмотреть
-                    </a>
-                </div>
-            {% endfor %}
+            <a href="/login" class="profile-btn">
+                <img src="/static/Person.png" alt="Профиль" class="profile-img">
+            </a>
         </div>
-    {% else %}
-        <p>У вас пока нет кейсов</p>
-    {% endif %}
-</div>
+    </header>
+	
+	<aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="/profile">ПРОФИЛЬ</a></li>
+                <li><a href="/my_cases">КЕЙСЫ В РАБОТЕ</a></li>
+                <li><a href="/cases">ВСЕ КЕЙСЫ</a></li>
+                <li><hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;"></li>
+                <li><a href="/logout">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <div id="main-container">
+        <h1 id="page-title">Мои кейсы</h1>
+        {% if cases %}
+            <div class="grid">
+                {% for case in cases %}
+                    <div class="card">
+                        <div class="company">{{ case.company_name }}</div>
 
-<a href="/" class="back-link">← На главную</a>
+                        <div class="title">
+                            {{ case.description[:60] }}{% if case.description|length > 60 %}...{% endif %}
+                        </div>
 
+                        <div class="desc">
+                            {{ case.description[:120] }}
+                        </div>
+
+                        <div class="footer">
+                            До: {{ case.end_time }}
+                        </div>
+
+                        <a href="/case/{{ case.id }}" class="btn">
+                            Просмотреть
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>У вас пока нет кейсов</p>
+        {% endif %}
+    </div>
+    <script>
+        // Логика сайдбара
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>
