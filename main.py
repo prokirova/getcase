@@ -499,6 +499,27 @@ def get_case_api(case_id):
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/company/<int:company_id>')
+def view_company(company_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    db = get_database()
+    cur = db.cursor(dictionary=True)
+
+    cur.execute("SELECT * FROM Companies WHERE id = %s", (company_id,))
+    company = cur.fetchone()
+
+    cur.close()
+    db.close()
+
+    if not company:
+        flash('Компания не найдена')
+        return redirect(url_for('index'))
+
+    return render_template('company.html', company=company)
+
+
 @app.route('/cases')
 def all_cases():
     if 'user_id' not in session:

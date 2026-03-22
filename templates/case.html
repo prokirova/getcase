@@ -290,7 +290,11 @@
       if (!res.ok) throw new Error("Не удалось загрузить кейс");
       const data = await res.json();
 
-      document.getElementById("case-title").textContent = data.company_name || "Кейс без названия";
+      	document.getElementById("case-title").innerHTML = `
+        <a href="/company/${data.organizer_id}" style="color: #1a1a2e; text-decoration: none;">
+            ${escapeHtml(data.company_name || "Кейс без названия")}
+        </a>
+        `;
       document.getElementById("case-id").textContent = `Кейс #${data.id}`;
 
       const areas = JSON.parse(data.areas || '[]');
