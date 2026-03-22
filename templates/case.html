@@ -190,169 +190,199 @@
   </div>
 
   <script>
-    const caseId = window.location.pathname.split('/').pop();
-    let hasJoined = false; // можно потом заменить на реальную проверку с бэкенда
+  const caseId = window.location.pathname.split('/').pop();
+  let hasJoined = false;
 
-    // -------------------------------------------------------------------------
-    // Форматирование даты
-    // -------------------------------------------------------------------------
-    function formatRussianDate(isoDate) {
-      if (!isoDate) return '—';
-      try {
-        const date = new Date(isoDate);
-        if (isNaN(date)) return '—';
-        return date.toLocaleDateString('ru-RU', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        });
-      } catch {
-        return isoDate;
-      }
+  // ────────────────────────────────────────────────
+  // 1. Функция проверки статуса участия (уже есть, но улучшена)
+  // ────────────────────────────────────────────────
+  async function checkParticipationStatus() {
+    try {
+      const res = await fetch(`/api/participation_status/${caseId}`);
+      if (!res.ok) throw new Error(`Статус ${res.status}`);
+
+      const data = await res.json();
+      hasJoined = !!data.participates;
+
+      updateActionButtons();
+      document.getElementById("my-files-section").style.display = hasJoined ? "block" : "none";
+    } catch (err) {
+      console.error("Ошибка проверки участия:", err);
+      // на всякий случай оставляем false, чтобы не показывать кнопку отправки
+      hasJoined = false;
+      updateActionButtons();
     }
+  }
 
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text.replace(/[&<>"']/g, m => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;',
-        '"': '&quot;', "'": '&#039;'
-      })[m]);
+  // ────────────────────────────────────────────────
+  // 2. Самая важная функция — переключение кнопок
+  // ────────────────────────────────────────────────
+  function updateActionButtons() {
+    const container = document.getElementById("action-buttons");
+    if (!container) return;
+
+    if (hasJoined) {
+      container.innerHTML = `
+        <button id="submit-solution-btn" class="button">Отправить решение</button>
+      `;
+      const btn = document.getElementById("submit-solution-btn");
+      if (btn) btn.addEventListener("click", openUploadModal);
+    } else {
+      container.innerHTML = `
+        <button id="join-case-btn" class="button">Принять участие</button>
+      `;
+      const btn = document.getElementById("join-case-btn");
+      if (btn) btn.addEventListener("click", joinCaseHandler);
     }
+  }
 
+  // ────────────────────────────────────────────────
+  // 3. Обработчик нажатия «Принять участие» (выносим отдельно)
+  // ────────────────────────────────────────────────
+  const joinCaseHandler = async function () {
+    try {
+      const res = await fetch(`/api/join_case/${caseId}`, { method: "POST" });
+      const data = await res.json();
 
-    async function loadCase() {
-      try {
-        const res = await fetch(`/api/cases/${caseId}`);
-        if (!res.ok) throw new Error("Не удалось загрузить кейс");
-        const data = await res.json();
-
-        document.getElementById("case-title").textContent = data.company_name || "Кейс без названия";
-        document.getElementById("case-id").textContent = `Кейс #${data.id}`;
-
-        const areas = JSON.parse(data.areas || '[]');
-        document.getElementById("tags").innerHTML = areas
-          .map(a => `<div class="tag">${escapeHtml(a)}</div>`).join('');
-
-        const performers = JSON.parse(data.performers || '[]');
-
-        document.getElementById("caseContent").innerHTML = `
-          <h3>Описание</h3>
-          <p>${escapeHtml(data.description || 'Описание отсутствует')}</p>
-
-          ${performers.length ? `
-            <h3>Текущие / желаемые участники</h3>
-            <div class="tags">
-              ${performers.map(p => `<div class="tag">${escapeHtml(p)}</div>`).join('')}
-            </div>
-          ` : ''}
-
-          <h3>Сроки</h3>
-          <div class="info-line">⏱ Дедлайн: ${formatRussianDate(data.end_time)}</div>
-        `;
-
-        // Здесь можно запросить статус участия пользователя
-        // await checkParticipationStatus();
-
-      } catch (e) {
-        document.getElementById("caseContent").innerHTML = `<h3>Ошибка</h3><p>${e.message}</p>`;
-      }
-    }
-
-
-    document.getElementById("join-case-btn").addEventListener("click", async () => {
-      try {
-        const res = await fetch(`/api/join_case/${caseId}`, { method: "POST" });
-        const data = await res.json();
-
-        if (data.success) {
-  hasJoined = true;
-  updateActionButtons();
-  alert(data.message);
-}
-      } catch (err) {
-        alert("Ошибка сети");
-      }
-    });
-
-    function updateActionButtons() {
-      const container = document.getElementById("action-buttons");
-      if (hasJoined) {
-        container.innerHTML = `
-          <button id="submit-solution-btn" class="button">Отправить решение</button>
-        `;
-        document.getElementById("submit-solution-btn").addEventListener("click", openUploadModal);
+      if (data.success) {
+        hasJoined = true;
+        updateActionButtons();
         document.getElementById("my-files-section").style.display = "block";
+
+        alert(data.message || "Вы успешно записались / уже участвуете");
       } else {
-        container.innerHTML = `
-          <button id="join-case-btn" class="button">Принять участие</button>
-        `;
-        document.getElementById("join-case-btn").addEventListener("click", arguments.callee);
+        alert(data.error || "Не удалось присоединиться");
       }
+    } catch (err) {
+      alert("Ошибка сети: " + err.message);
+    }
+  };
+
+  // ────────────────────────────────────────────────
+  // Остальные функции (без изменений, только порядок)
+  // ────────────────────────────────────────────────
+  function formatRussianDate(isoDate) {
+    if (!isoDate) return '—';
+    try {
+      const date = new Date(isoDate);
+      if (isNaN(date)) return '—';
+      return date.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    } catch {
+      return isoDate;
+    }
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;',
+      '"': '&quot;', "'": '&#039;'
+    })[m]);
+  }
+
+  async function loadCase() {
+    try {
+      const res = await fetch(`/api/cases/${caseId}`);
+      if (!res.ok) throw new Error("Не удалось загрузить кейс");
+      const data = await res.json();
+
+      document.getElementById("case-title").textContent = data.company_name || "Кейс без названия";
+      document.getElementById("case-id").textContent = `Кейс #${data.id}`;
+
+      const areas = JSON.parse(data.areas || '[]');
+      document.getElementById("tags").innerHTML = areas
+        .map(a => `<div class="tag">${escapeHtml(a)}</div>`).join('');
+
+      const performers = JSON.parse(data.performers || '[]');
+
+      document.getElementById("caseContent").innerHTML = `
+        <h3>Описание</h3>
+        <p>${escapeHtml(data.description || 'Описание отсутствует')}</p>
+
+        ${performers.length ? `
+          <h3>Текущие / желаемые участники</h3>
+          <div class="tags">
+            ${performers.map(p => `<div class="tag">${escapeHtml(p)}</div>`).join('')}
+          </div>
+        ` : ''}
+
+        <h3>Сроки</h3>
+        <div class="info-line">⏱ Дедлайн: ${formatRussianDate(data.end_time)}</div>
+      `;
+
+      // Самое важное — проверяем участие после загрузки данных
+      await checkParticipationStatus();
+
+    } catch (e) {
+      document.getElementById("caseContent").innerHTML = `<h3>Ошибка</h3><p>${e.message}</p>`;
+    }
+  }
+
+  // ────────────────────────────────────────────────
+  // Модалка загрузки файла
+  // ────────────────────────────────────────────────
+  const modal = document.getElementById("upload-modal");
+  const closeBtn = document.getElementById("close-modal");
+  const fileInput = document.getElementById("file-input");
+  const submitBtn = document.getElementById("submit-file-btn");
+
+  function openUploadModal() {
+    modal.style.display = "flex";
+    fileInput.value = "";
+  }
+
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+
+  submitBtn.addEventListener("click", async () => {
+    const file = fileInput.files[0];
+    if (!file) return alert("Выберите файл");
+
+    if (file.size > 50 * 1024 * 1024) {
+      return alert("Файл слишком большой (макс. 50 МБ)");
     }
 
-    const modal = document.getElementById("upload-modal");
-    const closeBtn = document.getElementById("close-modal");
-    const fileInput = document.getElementById("file-input");
-    const submitBtn = document.getElementById("submit-file-btn");
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("case_id", caseId);
 
-    function openUploadModal() {
-      modal.style.display = "flex";
-      fileInput.value = ""; // сбрасываем выбор
+    try {
+      const res = await fetch("/api/submit_solution", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Файл успешно отправлен!");
+        modal.style.display = "none";
+        addLocalFileDisplay(file.name);
+      } else {
+        alert(data.error || "Ошибка отправки");
+      }
+    } catch (err) {
+      alert("Ошибка сети");
     }
+  });
 
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+  function addLocalFileDisplay(filename) {
+    const list = document.getElementById("files-list");
+    const item = document.createElement("div");
+    item.className = "file-item";
+    item.innerHTML = `📄 ${escapeHtml(filename)} <small>(отправлено)</small>`;
+    list.appendChild(item);
+  }
 
-    submitBtn.addEventListener("click", async () => {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Выберите файл");
-        return;
-      }
-
-      if (file.size > 50 * 1024 * 1024) {
-        alert("Файл слишком большой (максимум 50 МБ)");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("case_id", caseId);
-
-      try {
-        const res = await fetch("/api/submit_solution", {
-          method: "POST",
-          body: formData
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-          alert("Решение успешно отправлено!");
-          modal.style.display = "none";
-
-          // Показываем файл локально
-          addLocalFileDisplay(file.name);
-          // fileInput.value = "";
-        } else {
-          alert(data.error || "Ошибка при отправке файла");
-        }
-      } catch (err) {
-        alert("Ошибка сети при загрузке");
-      }
-    });
-
-    function addLocalFileDisplay(filename) {
-      const list = document.getElementById("files-list");
-      const item = document.createElement("div");
-      item.className = "file-item";
-      item.innerHTML = `📄 ${escapeHtml(filename)} <small>(отправлено)</small>`;
-      list.appendChild(item);
-    }
-
-
-    loadCase();
-    // updateActionButtons();   ← раскомментировать, если нужно сразу показать по статусу
-  </script>
+  // ────────────────────────────────────────────────
+  // Запуск
+  // ────────────────────────────────────────────────
+  loadCase();
+  // updateActionButtons();  // уже вызывается внутри checkParticipationStatus
+</script>
 </body>
 </html>

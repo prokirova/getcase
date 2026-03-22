@@ -601,7 +601,7 @@ def join_case(case_id):
         if not already_participating:
             tasks.append(case_id)
             cur.execute(
-                "UPDATE Students SET tasks_started = %s WHERE id = %s",
+                "UPDATE students SET tasks_started = %s WHERE id = %s",
                 (json.dumps(tasks), session['user_id'])
             )
             db.commit()
@@ -694,6 +694,39 @@ def update_profile():
     except Exception as e:
         print(e)
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/participation_status/<int:case_id>', methods=['GET'])
+def participation_status(case_id):
+    if 'user_id' not in session:
+        return jsonify({"participates": False})
+
+    db = get_database()
+    cur = db.cursor(dictionary=True)
+
+    cur.execute("SELECT tasks_started FROM Students WHERE id = %s", (session['user_id'],))
+    user = cur.fetchone()
+
+    if not user:
+        print("Пользователь не найден в базе")
+        return jsonify({"participates": False})
+
+    raw_tasks = user['tasks_started']
+
+
+    tasks = json.loads(raw_tasks) if raw_tasks and raw_tasks.strip() else []
+
+    try:
+        tasks_int = [int(item) for item in tasks]
+        participates = case_id in tasks_int
+    except ValueError:
+        participates = False
+
+
+    cur.close()
+    db.close()
+
+    return jsonify({"participates": participates})
 
 
 @app.route('/logout')
