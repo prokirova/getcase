@@ -607,6 +607,56 @@ def join_case(case_id):
         print(e)
         return jsonify({"error": str(e)}), 500
 
+
+
+@app.route('/api/update_profile', methods=['POST'])
+def update_profile():
+    if 'user_id' not in session:
+        return jsonify({"error": "Not authorized"}), 401
+
+    try:
+        data = request.json
+
+        phone = data.get('phone')
+        telegram = data.get('telegram')
+        skills = data.get('skills')
+
+        db = get_database()
+        cur = db.cursor()
+
+        cur.execute("""
+        UPDATE Students SET
+            university=%s,
+            faculty=%s,
+            specialty=%s,
+            course=%s,
+            email=%s,
+            phone_number=%s,
+            tg_id=%s,
+            skills=%s
+        WHERE id=%s
+        """, (
+            data['university'],
+            data['faculty'],
+            data['specialty'],
+            int(data['course']),
+            data['email'],
+            data['phone'],
+            data['tg_id'],
+            json.dumps(data['skills']),
+            session['user_id']
+        ))
+
+        db.commit()
+        cur.close()
+        db.close()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/logout')
 def logout():
     session.clear()  # очищаем всю сессию

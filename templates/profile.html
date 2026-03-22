@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=ru">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,58 +8,63 @@
 <body>
     <div id="main-container">
         <div id="profile-image-box">
-            <img src="/static/Person.png" alt="000" id="profile-image">
+            <img src="/static/Person.png" alt="Фото профиля" id="profile-image">
         </div>
 
         <div id="user-info">
-            <div id="username">{{ user.full_name }}</div>
+            <!-- Полное имя теперь редактируется -->
+            <input type="text" id="full_name" class="main-input" value="{{ user.full_name }}">
 
             <div id="user-bio">
-                <div class="bio-row" id="university">
+                <div class="bio-row">
                     <p class="user-bio-title">ВУЗ</p>
-                    <p class="user-bio-info">{{ user.university }}</p>
+                    <input type="text" id="university" class="edit-input" value="{{ user.university }}">
                 </div>
-                <div class="bio-row" id="grade">
+
+                <div class="bio-row">
                     <p class="user-bio-title">Курс</p>
-                    <p class="user-bio-info">{{ user.course }} ({{ user.degree }})</p>
+                    <input type="text" id="course" class="edit-input" value="{{ user.course }}">
                 </div>
-                <div class="bio-row" id="institute">
+
+                <div class="bio-row">
                     <p class="user-bio-title">Институт</p>
-                    <p class="user-bio-info">{{ user.institute }}</p>
+                    <input type="text" id="faculty" class="edit-input" value="{{ user.institute }}">
                 </div>
-                <div class="bio-row" id="speciality">
+
+                <div class="bio-row">
                     <p class="user-bio-title">Направление</p>
-                    <p class="user-bio-info">{{ user.specialty }}</p>
+                    <input type="text" id="specialty" class="edit-input" value="{{ user.specialty }}">
                 </div>
-                <div class="bio-row" id="email">
+
+                <div class="bio-row">
                     <p class="user-bio-title">Email</p>
-                    <p class="user-bio-info">{{ user.email }}</p>
+                    <input type="email" id="email" class="edit-input" value="{{ user.email }}">
                 </div>
-                <div class="bio-row" id="phone-number">
+
+                <div class="bio-row">
                     <p class="user-bio-title">Телефон</p>
-                    <p class="user-bio-info">{{ user.phone or '—' }}</p>
+                    <input type="tel" id="phone" class="edit-input" value="{{ user.phone or '' }}">
                 </div>
-                <div class="bio-row" id="telegram">
+
+                <div class="bio-row">
                     <p class="user-bio-title">Телеграм</p>
-                    <p class="user-bio-info">{{ user.telegram or '—' }}</p>
+                    <input type="text" id="tg_id" class="edit-input" value="{{ user.telegram or '' }}">
                 </div>
             </div>
         </div>
 
-        <div id="side-buttons-div">
-            <a href="/" class="back-link">← На главную</a>
-            <a href="/my_cases">
-                <button id="show-cases-in-progress-btn">Посмотреть кейсы в работе</button>
-            </a>
-        </div>
-    
+
+
         <h2 id="user-skills-title">Мои навыки:</h2>
-        
+
         <div id="skills-container">
             {% for skill in user.skills %}
-            <div class="skillbox">{{ skill }}</div>
+            <div class="skillbox">
+                <span>{{ skill }}</span>
+                <button class="delete-skill">×</button>
+            </div>
             {% endfor %}
-            <button id="add-skill">+</button>
+            <input type="text" id="new-skill-input" placeholder="Добавить навык...">
         </div>
     </div>
 
@@ -88,11 +93,11 @@
             display: grid;
             grid-gap: 1rem;
             grid-template-areas:
-            "profile-image-box user-info side-buttons-div"
-            "user-skills-title skills-container skills-container";
+                "profile-image-box user-info side-buttons-div"
+                "user-skills-title skills-container skills-container";
             grid-template-columns: minmax(200px, 15%) 1fr minmax(60px, 12%);
 
-            margin: 50px 2% 50px 2%;
+            margin: 50px 2%;
             max-width: 96%;
             width: 96%;
         }
@@ -103,12 +108,10 @@
             height: 200px;
             width: 200px;
             border-radius: 100px;
-            margin-right: 10%;
 
             display: flex;
             align-items: center;
             justify-content: center;
-            justify-self: center;
             overflow: hidden;
         }
 
@@ -116,146 +119,246 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
 
         #side-buttons-div {
-            grid-area: side-buttons-div; 
+            grid-area: side-buttons-div;
             display: flex;
-            flex-direction: column; 
-            align-items: center; 
-            gap: 25px; 
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
         .back-link {
-            color: rgba(0, 0, 0, 0.850);
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             text-decoration: none;
-            font-weight: 800;
-            opacity: 0.9;
-            transition: opacity 0.2s;
-        }
-
-        .back-link:hover {
-            opacity: 1;
+            font-weight: bold;
+            color: black;
         }
 
         #user-info {
             grid-area: user-info;
-            display: flex;
-            flex-direction: column;
-            min-width: 70%;
         }
 
-        #username {
+        /* Стиль для редактируемого полного имени */
+        .main-input {
             margin-bottom: 20px;
             font-size: 40px;
             font-weight: bold;
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 0;
+            outline: none;
+            font-family: inherit;
         }
 
         #user-bio {
             background-color: #ffffff36;
             border-radius: 23px;
-            margin-bottom: 25px;
-            min-width: fit-content;
         }
 
         .bio-row {
             margin: 15px;
-            padding: 8px 12px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
-            height: fit-content;
-            min-height: 50px;
-            min-width: fit-content;
-
-            background-color: white;
-            border-radius: 8px;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .user-bio-title {
-            background-color: inherit;
-            font-weight: bold;
-            font-size: 18px;
-            color: #7a7a7a91;
+            font-size: 16px;
+            color: gray;
+            margin: 0;
         }
 
-        .user-bio-info {
-            background-color: inherit;
-            font-weight: bold;
-            font-size: 22px;
+        .edit-input {
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 8px;
+            border: none;
+            width: 60%;
+            text-align: right;
+            outline: none;
+            background: #f9f9f9;
+            font-family: inherit;
+        }
+
+        .edit-input:focus {
+            background: #fff;
+            box-shadow: 0 0 0 2px #654EB9;
+        }
+
+        #show-cases-in-progress-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            background-color: #654EB9;
+            color: white;
+            cursor: pointer;
         }
 
         #user-skills-title {
             grid-area: user-skills-title;
-            display: flex;
-            align-items: start;
-            justify-content: center;
-            padding-top: 20px;
-            font-size: 30px;
+            margin-top: 20px;
+            font-size: 24px;
         }
 
         #skills-container {
             grid-area: skills-container;
             display: flex;
-            flex-direction: row;
-            max-width: 85%;
             flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .skillbox,
-        #add-skill {
-            margin: 10px 10px;
-            padding: 15px 35px;
-            height: fit-content;
-            width: fit-content;
-
+        .skillbox {
+            margin: 0;
+            padding: 8px 15px;
             background-color: #654EB9;
-            border-radius: 25px;
-            border-color: transparent;
-
-            font-weight: bold;
-            font-size: 20px;
+            border-radius: 20px;
             color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        #add-skill:hover,
-        #return-btn:hover,
-        #show-cases-in-progress-btn:hover {
-            background-color: #7a13c8ae;
+        .delete-skill {
+            background: transparent;
+            border: none;
+            color: white;
             cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 0 4px;
+            line-height: 1;
         }
 
-        #show-cases-in-progress-btn {
-            margin: 10px 10px;
-            padding: 10px 25px;
-            height: fit-content;
-            width: fit-content;
+        .delete-skill:hover {
+            color: #ffaaaa;
+        }
 
-            background-color: #654EB9;
-            border-radius: 25px;
-            border-color: transparent;
-
-            font-weight: 500;
-            font-size: 1.2rem;
+        #new-skill-input {
+            margin: 0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #999;
             color: white;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        #new-skill-input::placeholder {
+            color: #eee;
+        }
+
+        #new-skill-input:focus {
+            background-color: #7a7a7a;
         }
     </style>
 
     <script>
-        const addSkillBtn = document.getElementById("add-skill")
-        const skillsContainer = document.getElementById("skills-container")
+        // === АВТОСОХРАНЕНИЕ ПОЛЕЙ ===
+        // Собираем все поля ввода, которые должны сохраняться
+        const autoSaveInputs = document.querySelectorAll('#full_name, .edit-input');
 
-        function generateNewSkill() {
-            const newSkill = document.createElement("div");
-            newSkill.className = "skillbox";
-            newSkill.textContent = "NEWSKILL!";
-            return newSkill;
+        async function saveProfile() {
+            // Собираем данные со всех полей
+            const data = {
+                full_name: document.getElementById('full_name').value,
+                university: document.getElementById('university').value,
+                course: document.getElementById('course').value,
+                faculty: document.getElementById('faculty').value,
+                specialty: document.getElementById('specialty').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                tg_id: document.getElementById('tg_id').value,
+                skills: collectSkills()
+            };
+
+            try {
+                const response = await fetch('/api/update_profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (!result.success) {
+                    console.warn('Ошибка при сохранении:', result.error);
+                }
+            } catch (err) {
+                console.error('Ошибка сети:', err);
+            }
         }
 
-        addSkillBtn.addEventListener("click", () => {
-            skillsContainer.insertBefore(generateNewSkill(), addSkillBtn);
-        })
+        // Вешаем сохранение при потере фокуса на всех полях
+        autoSaveInputs.forEach(input => {
+            input.addEventListener('blur', saveProfile);
+        });
+
+        // === НАВЫКИ ===
+        function collectSkills() {
+            const skills = [];
+            document.querySelectorAll('.skillbox span').forEach(span => {
+                skills.push(span.textContent);
+            });
+            return skills;
+        }
+
+        // Удаление навыка (только по кнопке)
+        function attachDeleteHandler(button) {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const skillbox = button.closest('.skillbox');
+                if (skillbox) skillbox.remove();
+                saveProfile();  // автосохраняем после удаления
+            });
+        }
+
+        // Добавляем обработчики на существующие кнопки удаления
+        document.querySelectorAll('.delete-skill').forEach(attachDeleteHandler);
+
+        // Добавление нового навыка по Enter
+        const newSkillInput = document.getElementById('new-skill-input');
+        newSkillInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && newSkillInput.value.trim() !== '') {
+                const skillName = newSkillInput.value.trim();
+
+                // Создаём элемент навыка
+                const skillDiv = document.createElement('div');
+                skillDiv.className = 'skillbox';
+                skillDiv.innerHTML = `
+                    <span>${escapeHtml(skillName)}</span>
+                    <button class="delete-skill">×</button>
+                `;
+
+                // Добавляем обработчик на новую кнопку удаления
+                const deleteBtn = skillDiv.querySelector('.delete-skill');
+                attachDeleteHandler(deleteBtn);
+
+                // Вставляем перед полем ввода
+                document.getElementById('skills-container').insertBefore(skillDiv, newSkillInput);
+
+                // Очищаем поле и сохраняем
+                newSkillInput.value = '';
+                saveProfile();
+            }
+        });
+
+        // Простейшая защита от XSS через навыки
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
     </script>
 </body>
 </html>
