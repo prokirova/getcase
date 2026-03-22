@@ -5,14 +5,29 @@
     <title>Кейсы</title>
 
     <style>
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --bg-gradient: linear-gradient(135deg, #9198e5, #D8C3F9);
+            --sidebar-width: 300px;
+        }
+
         body {
-            font-family: 'Segoe UI';
-            background: linear-gradient(135deg, #9198e5, #D8C3F9);
+            background: var(--bg-gradient);
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
+            font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        * {
             margin: 0;
-            padding: 30px;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         .grid {
@@ -78,77 +93,260 @@
             border-radius: 20px;
             font-weight: bold;
         }
+
+        /* --- Шапка (Header) --- */
+        .main-header {
+            background-color: transparent;
+            padding: 1rem 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 97%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .profile-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: 0.2s;
+            overflow: hidden;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.28);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Сайдбар (Sidebar) --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-<h2>Доступные кейсы</h2>
+            <a href="/login" class="profile-btn">
+                <img src="/static/Person.png" alt="Профиль" class="profile-img">
+            </a>
+        </div>
+    </header>
 
-<div class="grid" id="casesContainer">
-    Загрузка...
-</div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="/profile">ПРОФИЛЬ</a></li>
+                <li><a href="/index">ГЛАВНАЯ</a></li>
+                <li><a href="/my_cases">КЕЙСЫ В РАБОТЕ</a></li>
+                <li><a href="/cases">ВСЕ КЕЙСЫ</a></li>
+                <li><hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;"></li>
+                <li><a href="/logout">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-<script>
-async function loadCases() {
-    try {
-        const res = await fetch('/api/cases');
-        const container = document.getElementById('casesContainer');
+    <div class="overlay" id="overlay"></div>
 
-        if (!res.ok) {
-            container.innerHTML = "Ошибка загрузки: " + res.status;
-            return;
+    <div id="main-container">
+
+        <h2>Доступные кейсы</h2>
+
+        <div class="grid" id="casesContainer">
+            Загрузка...
+        </div>
+
+    </div>
+
+    <script>
+        // Логика сайдбара
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
         }
 
-        const data = await res.json();
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
 
-        if (!data.length) {
-            container.innerHTML = "Пока нет кейсов";
-            return;
+        async function loadCases() {
+            try {
+                const res = await fetch('/api/cases');
+                const container = document.getElementById('casesContainer');
+
+                if (!res.ok) {
+                    container.innerHTML = "Ошибка загрузки: " + res.status;
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (!data.length) {
+                    container.innerHTML = "Пока нет кейсов";
+                    return;
+                }
+
+                container.innerHTML = data.map(c => {
+                    const areas = Array.isArray(c.areas) ? c.areas : JSON.parse(c.areas || '[]');
+                    const safeDesc = escapeHtml(c.description || '');
+
+                    return `
+                        <div class="card" onclick="openCase(${c.id})">
+                            <div class="company">${c.company_name || 'Компания'}</div>
+
+                            <div class="tags">
+                                ${areas.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
+                            </div>
+
+                            <div class="title">${safeDesc.length > 60 ? safeDesc.slice(0, 60) + '...' : safeDesc}</div>
+                            <div class="desc">${safeDesc.slice(0, 120)}</div>
+
+                            <div class="footer">
+                                До: ${c.end_time}
+                            </div>
+
+                            <div class="btn">Принять участие</div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                document.getElementById('casesContainer').innerHTML = "Ошибка: " + e.message;
+            }
         }
 
-        container.innerHTML = data.map(c => {
-            const areas = Array.isArray(c.areas) ? c.areas : JSON.parse(c.areas || '[]');
-            const safeDesc = escapeHtml(c.description || '');
+        function openCase(id) {
+            window.location.href = `/case/${id}`;
+        }
 
-            return `
-                <div class="card" onclick="openCase(${c.id})">
-                    <div class="company">${c.company_name || 'Компания'}</div>
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
 
-                    <div class="tags">
-                        ${areas.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
-                    </div>
-
-                    <div class="title">${safeDesc.length > 60 ? safeDesc.slice(0, 60) + '...' : safeDesc}</div>
-                    <div class="desc">${safeDesc.slice(0, 120)}</div>
-
-                    <div class="footer">
-                        До: ${c.end_time}
-                    </div>
-
-                    <div class="btn">Принять участие</div>
-                </div>
-            `;
-        }).join('');
-
-    } catch (e) {
-        document.getElementById('casesContainer').innerHTML = "Ошибка: " + e.message;
-    }
-}
-
-function openCase(id) {
-    window.location.href = `/case/${id}`;
-}
-
-function escapeHtml(text) {
-    if (!text) return '';
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-}
-
-loadCases();
-</script>
+        loadCases();
+    </script>
 
 </body>
 </html>

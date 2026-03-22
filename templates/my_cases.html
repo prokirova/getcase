@@ -41,6 +41,59 @@
         #main-container {
             margin-left: min(40px, 5%);
         }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .company {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .desc {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .btn {
+            display: block;
+            margin-top: 15px;
+            padding: 10px;
+            text-align: center;
+            background: linear-gradient(90deg, #a18cd1, #6a9ff8);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -49,13 +102,29 @@
 
 <div id="main-container">
     {% if cases %}
-        {% for case in cases %}
-            <div style="border:1px solid black; padding:10px; margin:10px;">
-                <h3>{{ case.company_name }}</h3>
-                <p>{{ case.description }}</p>
-                <a href="/case/{{ case.id }}">Открыть кейс</a>
-            </div>
-        {% endfor %}
+        <div class="grid">
+            {% for case in cases %}
+                <div class="card">
+                    <div class="company">{{ case.company_name }}</div>
+
+                    <div class="title">
+                        {{ case.description[:60] }}{% if case.description|length > 60 %}...{% endif %}
+                    </div>
+
+                    <div class="desc">
+                        {{ case.description[:120] }}
+                    </div>
+
+                    <div class="footer">
+                        До: {{ case.end_time }}
+                    </div>
+
+                    <a href="/case/{{ case.id }}" class="btn">
+                        Просмотреть
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
         <p>У вас пока нет кейсов</p>
     {% endif %}
