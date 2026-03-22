@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль компании</title>
+    <style>
+    body {
+        margin: 0;
+        font-family: Bahnschrift, sans-serif;
+        background: linear-gradient(135deg, #9198e5, #D8C3F9);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    .container {
+      padding: 40px 60px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .logo {
+      width: 240px;
+      height: 240px;
+      min-width: 240px;
+      min-height: 240px;
+      border-radius: 50%;
+      background: white;
+      margin-right: 50px;
+    }
+
+    .company-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .company-name {
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    .tags {
+      display: flex;
+      gap: 10px;
+    }
+
+    .tag {
+      background: #6c63ff;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 18px;
+    }
+
+    .description {
+      margin-top: 25px;
+      background: rgba(255,255,255,0.4);
+      padding: 25px;
+      border-radius: 25px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #222;
+      max-width: 80%;
+    }
+
+    .cases-title {
+      margin-top: 40px;
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .cases {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .case {
+      background: #eee;
+      border-radius: 30px;
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .case-left {
+      max-width: 70%;
+    }
+
+    .case-title {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .case-text {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .deadline {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .case-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 15px;
+    }
+
+    .btn {
+      background: #6c63ff;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 25px;
+      text-decoration: none;
+    }
+
+    .tag-small {
+      background: #6c63ff;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="top">
+    <div class="logo"></div>
+
+    <div>
+      <div class="company-header">
+        <div class="company-name">{{ company.name }}</div>
+        <div class="tags">
+          <div class="tag">IT</div>
+          <div class="tag">Финансы</div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="description">Загрузка...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cases">
+
+{% for p in projects|sort(attribute='end_time') %}
+  <div class="case" onclick="openCase({{ p.id }})">
+
+    <div class="case-left">
+      <div class="case-title">
+        {{ p.description[:60] }}
+      </div>
+
+      <div class="case-text">
+        {{ p.description[:120] }}
+      </div>
+
+      <div class="deadline">⏱ До {{ p.end_time }}</div>
+    </div>
+
+    <div class="case-right">
+
+      {% for area in p.areas|safe|loads %}
+        <div class="tag-small">{{ area }}</div>
+      {% endfor %}
+
+      <a href="#" class="btn" onclick="joinCase(event, {{ p.id }})">
+        Принять участие
+      </a>
+    </div>
+
+  </div>
+{% endfor %}
+
+</div>
+
+</div>
+
+<script>
+function openCase(id) {
+    window.location.href = `/case/${id}`;
+}
+
+function joinCase(e, id) {
+    e.stopPropagation();
+
+    fetch(`/api/join_case/${id}`, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Вы записались на кейс!");
+        } else {
+            alert(data.error);
+        }
+    });
+}
+</script>
+
+</body>
+</html>

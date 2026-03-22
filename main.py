@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 import os
+import json
+
 from datetime import datetime
 import bcrypt
 
@@ -74,6 +76,7 @@ def init_db():
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback_secret_key_if_not_set')
+app.jinja_env.filters['loads'] = json.loads
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -346,6 +349,84 @@ def profile():
         print(e)
         flash('Ошибка при загрузке профиля')
         return redirect(url_for('index'))
+
+
+@app.route('/company/<int:company_id>')
+def company_page(company_id):
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        cur.execute("SELECT * FROM Companies WHERE id = %s", (company_id,))
+        company = cur.fetchone()
+
+        if not company:
+            return "Company not found", 404
+
+        import json
+        projects = json.loads(company['projects'] or '{}')
+
+        # превращаем dict → list
+        projects_list = []
+        for key in projects:
+            proj = projects[key]
+            proj['id'] = int(key)
+            projects_list.append(proj)
+
+        cur.close()
+        db.close()
+
+        return render_template(
+            'company.html',
+            company=company,
+            projects=projects_list
+        )
+
+    except Exception as e:
+        print(e)
+        return "Ошибка сервера", 500
+
+
+@app.route('/api/company/<int:company_id>', methods=['GET'])
+def get_company_api(company_id):
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
+
+        cur.execute("""
+            SELECT * FROM Companies WHERE id = %s
+        """, (company_id,))
+
+        company = cur.fetchone()
+
+        cur.close()
+        db.close()
+
+        if not company:
+            return jsonify({"error": "Company not found"}), 404
+
+        # projects — JSON-строка → парсим
+        import json
+        projects = json.loads(company['projects'] or '{}')
+
+        # превращаем словарь в список
+        projects_list = []
+        for key in projects:
+            proj = projects[key]
+            proj['id'] = int(key)  # ключ = id кейса
+            projects_list.append(proj)
+
+        return jsonify({
+            "id": company["id"],
+            "name": company["name"],
+            "information": company["information"],
+            "projects": projects_list
+        })
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     init_db()

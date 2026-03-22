@@ -339,10 +339,10 @@
             <div id="top-cases-container">
                 <div style="text-align: center; color: white; font-weight: 500;">Посмотреть кейсы топ компаний:</div>
                 <div id="top-cases">
-                    <div class="company-card">Ozon</div>
-                    <div class="company-card">Yandex</div>
-                    <div class="company-card">Sber</div>
-                    <div class="company-card">VK</div>
+                    <div class="company-card" onclick="openCompany(1)">Ozon</div>
+                    <div class="company-card" onclick="openCompany(2)">Yandex</div>
+                    <div class="company-card" onclick="openCompany(3)">Sber</div>
+                    <div class="company-card" onclick="openCompany(4)">VK</div>
                 </div>
             </div>
         </section>
@@ -383,6 +383,12 @@
         openBtn.addEventListener('click', toggleSidebar);
         closeBtn.addEventListener('click', toggleSidebar);
         overlay.addEventListener('click', toggleSidebar);
+
+        // Открытие компании
+        function openCompany(id) {
+            window.location.href = `/company/${id}`;
+        }
+
 
         // Логика поиска
         document.getElementById("search-cases-btn").addEventListener("click", () => {
