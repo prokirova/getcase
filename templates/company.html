@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль компании</title>
+    <title>{{ company.name }} — GetCase</title>
     <style>
     body {
         margin: 0;
@@ -11,132 +11,163 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
+        color: #222;
     }
 
     .container {
-      padding: 40px 60px;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 60px;
     }
 
     .top {
-      display: flex;
-      align-items: center;
-      gap: 30px;
+        display: flex;
+        align-items: center;
+        gap: 40px;
     }
 
     .logo {
-      width: 240px;
-      height: 240px;
-      min-width: 240px;
-      min-height: 240px;
-      border-radius: 50%;
-      background: white;
-      margin-right: 50px;
+        width: 240px;
+        height: 240px;
+        min-width: 240px;
+        min-height: 240px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     }
 
     .company-header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
     .company-name {
-      font-size: 40px;
-      font-weight: bold;
+        font-size: 42px;
+        font-weight: bold;
+        margin: 0;
+        color: #1a1a2e;
     }
 
     .tags {
-      display: flex;
-      gap: 10px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
     }
 
     .tag {
-      background: #6c63ff;
-      color: white;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 18px;
+        background: #6c63ff;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 24px;
+        font-size: 18px;
     }
 
     .description {
-      margin-top: 25px;
-      background: rgba(255,255,255,0.4);
-      padding: 25px;
-      border-radius: 25px;
-      font-size: 18px;
-      line-height: 1.6;
-      color: #222;
-      max-width: 80%;
+        margin-top: 28px;
+        background: rgba(255,255,255,0.55);
+        padding: 28px;
+        border-radius: 28px;
+        font-size: 18px;
+        line-height: 1.65;
+        color: #222;
+        max-width: 85%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
     .cases-title {
-      margin-top: 40px;
-      font-size: 40px;
-      font-weight: bold;
-      text-align: center;
+        margin: 60px 0 30px;
+        font-size: 38px;
+        font-weight: bold;
+        text-align: center;
+        color: #1a1a2e;
     }
 
     .cases {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
     }
 
     .case {
-      background: #eee;
-      border-radius: 30px;
-      padding: 25px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+        background: rgba(255,255,255,0.92);
+        border-radius: 30px;
+        padding: 28px 36px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        transition: transform 0.15s;
+    }
+
+    .case:hover {
+        transform: translateY(-4px);
     }
 
     .case-left {
-      max-width: 70%;
+        max-width: 68%;
     }
 
     .case-title {
-      font-size: 30px;
-      margin-bottom: 10px;
+        font-size: 28px;
+        margin: 0 0 12px;
+        color: #1a1a2e;
     }
 
     .case-text {
-      color: #666;
-      margin-bottom: 15px;
-      font-size: 18px;
+        color: #555;
+        margin: 0 0 16px;
+        font-size: 17px;
+        line-height: 1.5;
     }
 
     .deadline {
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #444;
     }
 
     .case-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 16px;
+        min-width: 180px;
     }
 
     .btn {
-      background: #6c63ff;
-      color: white;
-      padding: 12px 22px;
-      border-radius: 25px;
-      text-decoration: none;
+        background: #6c63ff;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 28px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .btn:hover {
+        background: #5a52e0;
     }
 
     .tag-small {
-      background: #6c63ff;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 13px;
+        background: #6c63ff;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
     }
 
-  </style>
+    .no-cases {
+        text-align: center;
+        font-size: 20px;
+        color: #555;
+        margin: 60px 0;
+    }
+    </style>
 </head>
 <body>
 
@@ -147,15 +178,16 @@
 
     <div>
       <div class="company-header">
-        <div class="company-name">Т-Банк</div>
+        <div class="company-name">{{ company.name }}</div>
         <div class="tags">
-          <div class="tag">IT</div>
-          <div class="tag">Финансы</div>
+          <!-- Здесь можно вывести теги компании, если добавишь поле в БД -->
+          <!-- Пока статично или пусто -->
+          <!-- <div class="tag">IT</div><div class="tag">Финансы</div> -->
         </div>
       </div>
 
       <div class="description">
-        Т Банк — российский коммерческий банк, специализирующийся на дистанционном обслуживании. Не имеет розничных отделений. Банк основан в 2006 году предпринимателем Олегом Тиньковым. Изначально назывался «ТКС-банк». По данным на февраль 2026 года, «Т-Банк» занимает-е место по размеру активов среди банков России, 4-е — по объёму вкладов, 6-е — по сумме выданных кредитов.
+        {{ company.information or 'Информация о компании пока отсутствует.' }}
       </div>
     </div>
   </div>
@@ -163,33 +195,36 @@
   <div class="cases-title">Кейсы</div>
 
   <div class="cases">
+    {% if cases %}
+      {% for case in cases %}
+        <div class="case">
+          <div class="case-left">
+            <div class="case-title">
+              <a href="/case/{{ case.id }}" style="color: inherit; text-decoration: none;">
+                {{ case.description | truncate(80) }}
+              </a>
+            </div>
+            <div class="case-text">
+              {{ case.description | truncate(140) }}...
+            </div>
+            <div class="deadline">
+              ⏱ До {{ case.end_time.strftime('%d.%m.%y') }}
+            </div>
+          </div>
 
-    <div class="case">
-      <div class="case-left">
-        <div class="case-title">Разработка мобильного приложения для инвестиций</div>
-        <div class="case-text">Разработать мобильное приложение для инвестиций с функциями регистрации, просмотра портфеля, покупки/продажи акций и пополнения счёта....</div>
-        <div class="deadline">⏱ До 03.04.26</div>
+          <div class="case-right">
+          {% for area in case.areas %}
+            <div class="tag-small">{{ area }}</div>
+          {% endfor %}
+          <a href="/case/{{ case.id }}" class="btn">Посмотреть кейс</a>
+        </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-cases">
+        У этой компании пока нет опубликованных кейсов.
       </div>
-
-      <div class="case-right">
-        <div class="tag-small">UX/UI Design</div>
-        <a href="#" class="btn">Принять участие</a>
-      </div>
-    </div>
-
-    <div class="case">
-      <div class="case-left">
-        <div class="case-title">Оптимизация алгоритма рекомендаций</div>
-        <div class="case-text">Оптимизировать существующий алгоритм рекомендаций для повышения точности подбора контента и скорости работы.....</div>
-        <div class="deadline">⏱ До 03.04.26</div>
-      </div>
-
-      <div class="case-right">
-        <div class="tag-small">Data Science</div>
-        <a href="#" class="btn">Принять участие</a>
-      </div>
-    </div>
-
+    {% endif %}
   </div>
 
 </div>

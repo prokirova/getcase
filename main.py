@@ -504,20 +504,44 @@ def view_company(company_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    db = get_database()
-    cur = db.cursor(dictionary=True)
+    try:
+        db = get_database()
+        cur = db.cursor(dictionary=True)
 
-    cur.execute("SELECT * FROM Companies WHERE id = %s", (company_id,))
-    company = cur.fetchone()
+        cur.execute("""
+            SELECT id, name, information, projects 
+            FROM Companies 
+            WHERE id = %s
+        """, (company_id,))
+        company = cur.fetchone()
 
-    cur.close()
-    db.close()
+        if not company:
+            flash('Компания не найдена')
+            return redirect(url_for('cases'))
 
-    if not company:
-        flash('Компания не найдена')
-        return redirect(url_for('index'))
+        cur.execute("""
+            SELECT id, description, areas, publication_time, end_time 
+            FROM Cases 
+            WHERE organizer_id = %s
+            ORDER BY publication_time DESC
+        """, (company_id,))
+        cases = cur.fetchall()
 
-    return render_template('company.html', company=company)
+        # ← Вот это самое важное добавление
+        for case in cases:
+            case['areas'] = json.loads(case['areas'] or '[]')   # теперь это список
+
+        cur.close()
+        db.close()
+
+        return render_template('company.html',
+                             company=company,
+                             cases=cases)
+
+    except Exception as e:
+        print(e)
+        flash('Ошибка при загрузке страницы компании')
+        return redirect(url_for('cases'))
 
 
 @app.route('/cases')
