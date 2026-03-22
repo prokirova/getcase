@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <title>{{ company.name }} — GetCase</title>
     <style>
+
+        :root {
+            --primary-color: #6f2c80;
+            --accent-color: #b023d3;
+            --text-color: #000000;
+            --bg-gradient: linear-gradient(135deg, #9198e5, #D8C3F9);
+            --sidebar-width: 300px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        
     body {
         margin: 0;
         font-family: Bahnschrift, sans-serif;
@@ -13,6 +27,261 @@
         background-size: cover;
         color: #222;
     }
+
+        /* --- Шапка (Header) --- */
+        .main-header {
+            background-color: transparent;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 97%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .profile-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: 0.2s;
+            overflow: hidden;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.28);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Сайдбар (Sidebar) --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .container {
+        padding: 40px 60px;
+        }
+
+        .top {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        }
+
+        .logo {
+        width: 240px;
+        height: 240px;
+        min-width: 240px;
+        min-height: 240px;
+        border-radius: 50%;
+        background: white;
+        margin-right: 50px;
+        }
+
+        .company-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        }
+
+        .company-name {
+        font-size: 40px;
+        font-weight: bold;
+        }
+
+        .tags {
+        display: flex;
+        gap: 10px;
+        }
+
+        .tag {
+        background: #6c63ff;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 18px;
+        }
+
+        .description {
+        margin-top: 25px;
+        background: rgba(255,255,255,0.4);
+        padding: 25px;
+        border-radius: 25px;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #222;
+        max-width: 80%;
+        }
+
+        .cases-title {
+        margin-top: 40px;
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        }
+
+        .cases {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        }
+
+        .case {
+        background: #eee;
+        border-radius: 30px;
+        padding: 25px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+
+        .case-left {
+        max-width: 70%;
+        }
+
+        .case-title {
+        font-size: 30px;
+        margin-bottom: 10px;
+        }
+
+        .case-text {
+        color: #666;
+        margin-bottom: 15px;
+        font-size: 18px;
+        }
+
+        .deadline {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        }
+
+        .case-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 15px;
+        }
+
+        .btn {
+        background: #6c63ff;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 25px;
+        text-decoration: none;
+        }
+
+        .tag-small {
+        background: #6c63ff;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        }
 
     .container {
         max-width: 1100px;
@@ -170,7 +439,38 @@
     </style>
 </head>
 <body>
+    <header class="main-header">
+        <div class="header-container">
+            <button class="sidebar-toggle" id="openSidebar" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
+            <a href="/login" class="profile-btn">
+                <img src="/static/Person.png" alt="Профиль" class="profile-img">
+            </a>
+        </div>
+    </header>
+  
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GETCASE</h3>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="/profile">ПРОФИЛЬ</a></li>
+        <li><a href="/">ГЛАВНАЯ</a></li>
+                <li><a href="/my_cases">КЕЙСЫ В РАБОТЕ</a></li>
+                <li><a href="/cases">ВСЕ КЕЙСЫ</a></li>
+                <li><hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;"></li>
+                <li><a href="/logout">ВЫЙТИ ИЗ ПРОФИЛЯ</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
 <div class="container">
 
   <div class="top">
@@ -228,6 +528,21 @@
   </div>
 
 </div>
+    <script>
+        // Логика сайдбара
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementsByClassName('overlay')[0];
 
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>
